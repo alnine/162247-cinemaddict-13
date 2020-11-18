@@ -1,7 +1,7 @@
 # Проект «Киноман» [![Build status][travis-image]][travis-url]
 
-* Студент: [Aleksandr Kushniruk](https://up.htmlacademy.ru/ecmascript/13/user/162247).
-* Наставник: `Неизвестно`.
+- Студент: [Aleksandr Kushniruk](https://up.htmlacademy.ru/ecmascript/13/user/162247).
+- Наставник: [Ruslan Malogulko](https://htmlacademy.ru/profile/id9728).
 
 ---
 

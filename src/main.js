@@ -8,13 +8,16 @@ import {createLoadMoreBtnTemplate} from "./view/load-more-btn";
 import {createExtraFilmListTemplate} from "./view/extra-film-list";
 import {createFilmDetailsTemplate} from "./view/film-details";
 import {createFilmsAmountTemplate} from "./view/films-amount";
+import {generateFilm} from "./mock/film";
 
-const MAIN_FILMS_COUNT = 5;
 const EXTRA_FILMS_COUNT = 2;
+const FILMS_COUNT = 20;
 
 const renderComponent = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
+
+const films = new Array(FILMS_COUNT).fill().map(generateFilm);
 
 const siteBody = document.querySelector(`body`);
 const siteHeaderElement = siteBody.querySelector(`.header`);
@@ -32,9 +35,9 @@ renderComponent(mainContentElement, createMainFilmListTemplate(), `beforeend`);
 const mainFilmListElement = mainContentElement.querySelector(`.films-list`);
 const mainFilmListContainerElement = mainFilmListElement.querySelector(`.films-list__container`);
 
-for (let i = 0; i < MAIN_FILMS_COUNT; i++) {
-  renderComponent(mainFilmListContainerElement, createFilmCardTemplate(), `beforeend`);
-}
+films.forEach((film) => {
+  renderComponent(mainFilmListContainerElement, createFilmCardTemplate(film), `beforeend`);
+});
 
 renderComponent(mainFilmListElement, createLoadMoreBtnTemplate(), `beforeend`);
 

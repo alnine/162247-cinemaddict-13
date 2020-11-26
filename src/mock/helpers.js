@@ -6,7 +6,3 @@ export const getRandomInteger = (a = 0, b = 1) => {
 
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
-
-export const capitalizeWord = (word) => {
-  return word.charAt(0).toUpperCase() + word.slice(1);
-};

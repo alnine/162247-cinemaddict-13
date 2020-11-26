@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import {FILM_TITLES, FILM_IMAGE, FILM_DESC, GENRES, COUNTRIES, AGE_RATINGS, NAMES} from "./constants";
 import {BASE_IMAGE_PATH} from "../constants";
-import {getRandomInteger, capitalizeWord} from "./helpers";
+import {getRandomInteger} from "./helpers";
 import {generateComment} from "./comment";
 
 const generateTitle = () => {
@@ -44,11 +44,10 @@ const generateComments = () => {
 
 export const generateFilm = () => {
   const title = generateTitle();
-  const capitalizeTitle = title.split(` `).map(capitalizeWord).join(` `);
 
   return {
-    title: capitalizeTitle,
-    originalTitle: capitalizeTitle,
+    title,
+    originalTitle: title,
     posterUrl: `${BASE_IMAGE_PATH}${FILM_IMAGE[title]}`,
     desc: generateDesc(),
     genres: [GENRES[getRandomInteger(0, GENRES.length - 1)]],

@@ -5,7 +5,8 @@ import {createFilmsTemplate} from "./view/films";
 import {createMainFilmListTemplate} from "./view/main-film-list";
 import {createFilmCardTemplate} from "./view/film-card";
 import {createLoadMoreBtnTemplate} from "./view/load-more-btn";
-import {createExtraFilmListTemplate} from "./view/extra-film-list";
+import {createTopRatedFilmsTemplate} from "./view/top-rated-film-list";
+import {createMostCommentedFilmsTemplate} from "./view/most-commented-film-list";
 import {createFilmDetailsTemplate} from "./view/film-details";
 import {createFilmsAmountTemplate} from "./view/films-amount";
 import {generateFilm} from "./mock/film";
@@ -13,7 +14,6 @@ import {generateFilters} from "./mock/filters";
 
 const FILMS_COUNT = 19;
 const FILMS_PER_STEP = 5;
-const EXTRA_FILMS_COUNT = 2;
 
 const renderComponent = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -68,8 +68,8 @@ if (films.length > FILMS_PER_STEP) {
   });
 }
 
-// renderComponent(mainContentElement, createExtraFilmListTemplate(`Top rated`, EXTRA_FILMS_COUNT), `beforeend`);
-// renderComponent(mainContentElement, createExtraFilmListTemplate(`Most commented`, EXTRA_FILMS_COUNT), `beforeend`);
+renderComponent(mainContentElement, createTopRatedFilmsTemplate(films), `beforeend`);
+renderComponent(mainContentElement, createMostCommentedFilmsTemplate(films), `beforeend`);
 
 const siteFooterElement = siteBody.querySelector(`.footer`);
 

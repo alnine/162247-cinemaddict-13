@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
-import {FILM_TITLES, FILM_IMAGE, FILM_DESC, GENRES, COUNTRIES, AGE_RATINGS, NAMES} from "./constants";
-import {BASE_IMAGE_PATH} from "../constants";
+import {BASE_IMAGE_PATH, FILM_TITLES, FILM_IMAGE, FILM_DESC, GENRES, COUNTRIES, AGE_RATINGS, NAMES} from "./constants";
 import {getRandomInteger} from "./helpers";
 import {generateComment} from "./comment";
 
@@ -30,20 +29,22 @@ const generateDesc = () => {
 
 const generateComments = () => {
   const size = getRandomInteger(0, 5);
-  const comments = new Array(size)
-    .fill()
-    .map(generateComment)
-    .sort((a, b) => {
-      const date1 = dayjs(a.date);
-      const date2 = dayjs(b.date);
+  const comments = new Array(size).fill().map(generateComment);
 
-      return date2.diff(date1);
-    });
   return comments;
+};
+
+const generateReleaseDate = () => {
+  const day = getRandomInteger(1, 31);
+  const month = getRandomInteger(0, 11);
+  const year = getRandomInteger(1930, 2020);
+
+  return dayjs().date(day).month(month).year(year).toDate();
 };
 
 export const generateFilm = () => {
   const title = generateTitle();
+  generateReleaseDate();
 
   return {
     title,
@@ -52,11 +53,7 @@ export const generateFilm = () => {
     desc: generateDesc(),
     genres: [GENRES[getRandomInteger(0, GENRES.length - 1)]],
     runtime: getRandomInteger(60, 180),
-    releaseDate: {
-      day: getRandomInteger(1, 30),
-      month: getRandomInteger(1, 12),
-      year: getRandomInteger(1930, 2020),
-    },
+    releaseDate: generateReleaseDate(),
     country: COUNTRIES[getRandomInteger(0, COUNTRIES.length - 1)],
     ageRating: AGE_RATINGS[getRandomInteger(0, AGE_RATINGS.length - 1)],
     totalRating: getRandomInteger(0, 10),
@@ -64,5 +61,8 @@ export const generateFilm = () => {
     director: NAMES[getRandomInteger(0, NAMES.length - 1)],
     writers: [NAMES[getRandomInteger(0, NAMES.length - 1)]],
     actors: [NAMES[getRandomInteger(0, NAMES.length - 1)]],
+    isWatchList: Boolean(getRandomInteger(0, 1)),
+    isWatched: Boolean(getRandomInteger(0, 1)),
+    isFavorite: Boolean(getRandomInteger(0, 1)),
   };
 };

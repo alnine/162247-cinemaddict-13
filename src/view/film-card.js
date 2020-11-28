@@ -1,14 +1,7 @@
-const capitalizeWord = (word) => {
-  return word.charAt(0).toUpperCase() + word.slice(1);
-};
+import dayjs from "dayjs";
+import {capitilizeString, getDurationString} from "../helpers";
 
-const getDurationString = (minutes) => {
-  const minsInHour = 60;
-  const restMin = minutes % minsInHour;
-  const hours = (minutes - restMin) / minsInHour;
-
-  return `${hours}h ${restMin}m`;
-};
+const YEAR_FORMAT = `YYYY`;
 
 const getShortDesc = (desc) => {
   const DESC_LENGTH = 140;
@@ -16,14 +9,25 @@ const getShortDesc = (desc) => {
 };
 
 export const createFilmCardTemplate = (film) => {
-  const {title, totalRating, releaseDate, runtime, genres, posterUrl, desc, comments} = film;
-  const capitalizeTitle = title.split(` `).map(capitalizeWord).join(` `);
+  const {
+    title,
+    totalRating,
+    releaseDate,
+    runtime,
+    genres,
+    posterUrl,
+    desc,
+    comments,
+    isWatchList,
+    isWatched,
+    isFavorite,
+  } = film;
 
   return `<article class="film-card">
-    <h3 class="film-card__title">${capitalizeTitle}</h3>
+    <h3 class="film-card__title">${capitilizeString(title)}</h3>
     <p class="film-card__rating">${totalRating}</p>
     <p class="film-card__info">
-      <span class="film-card__year">${releaseDate.year}</span>
+      <span class="film-card__year">${dayjs(releaseDate).format(YEAR_FORMAT)}</span>
       <span class="film-card__duration">${getDurationString(runtime)}</span>
       <span class="film-card__genre">${genres.join(`,`)}</span>
     </p>
@@ -31,9 +35,12 @@ export const createFilmCardTemplate = (film) => {
     <p class="film-card__description">${getShortDesc(desc)}</p>
     <a class="film-card__comments">${comments.length} comments</a>
     <div class="film-card__controls">
-      <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
-      <button class="film-card__controls-item button film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
-      <button class="film-card__controls-item button film-card__controls-item--favorite" type="button">Mark as favorite</button>
+      <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist
+      ${isWatchList ? `film-card__controls-item--active` : ``}" type="button">Add to watchlist</button>
+      <button class="film-card__controls-item button film-card__controls-item--mark-as-watched
+      ${isWatched ? `film-card__controls-item--active` : ``}" type="button">Mark as watched</button>
+      <button class="film-card__controls-item button film-card__controls-item--favorite
+      ${isFavorite ? `film-card__controls-item--active` : ``}" type="button">Mark as favorite</button>
     </div>
   </article>`;
 };

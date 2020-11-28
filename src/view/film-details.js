@@ -22,9 +22,6 @@ export const createFilmDetailsTemplate = (film) => {
     writers,
     actors,
     country,
-    isWatchList,
-    isWatched,
-    isFavorite,
   } = film;
 
   const commentsList = comments

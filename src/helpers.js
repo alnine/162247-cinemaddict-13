@@ -14,3 +14,7 @@ export const getDurationString = (minutes) => {
 
   return `${hours}h ${restMin}m`;
 };
+
+export const renderTemplate = (container, template, place) => {
+  container.insertAdjacentHTML(place, template);
+};

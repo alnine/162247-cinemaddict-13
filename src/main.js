@@ -1,4 +1,4 @@
-import {createProfileTemplate} from "./view/profile";
+import ProfileView from "./view/profile";
 import {createSiteMenuTemplate} from "./view/site-menu";
 import {createListSortTemplate} from "./view/list-sort";
 import {createFilmsTemplate} from "./view/films";
@@ -11,7 +11,7 @@ import {createFilmDetailsTemplate} from "./view/film-details";
 import {createFilmsAmountTemplate} from "./view/films-amount";
 import {generateFilm} from "./mock/film";
 import {generateFilters} from "./mock/filters";
-import {renderTemplate} from "./helpers";
+import {renderTemplate, renderElement, RenderPosition} from "./helpers";
 
 const FILMS_COUNT = 19;
 const FILMS_PER_STEP = 5;
@@ -25,7 +25,7 @@ const siteHeaderElement = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 
 if (userViewedFilmAmount) {
-  renderTemplate(siteHeaderElement, createProfileTemplate(userViewedFilmAmount), `beforeend`);
+  renderElement(siteHeaderElement, new ProfileView(userViewedFilmAmount).getElement(), RenderPosition.BEFOREEND);
 }
 
 renderTemplate(siteMainElement, createSiteMenuTemplate(filters), `beforeend`);

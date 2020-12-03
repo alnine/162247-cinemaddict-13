@@ -1,6 +1,6 @@
 import ProfileView from "./view/profile";
 import SiteMenuView from "./view/site-menu";
-import {createListSortTemplate} from "./view/list-sort";
+import ListSortView from "./view/list-sort";
 import {createFilmsTemplate} from "./view/films";
 import {createMainFilmListTemplate} from "./view/main-film-list";
 import {createFilmCardTemplate} from "./view/film-card";
@@ -29,7 +29,7 @@ if (userViewedFilmAmount) {
 }
 
 renderElement(siteMainElement, new SiteMenuView(filters).getElement(), RenderPosition.BEFOREEND);
-renderTemplate(siteMainElement, createListSortTemplate(), `beforeend`);
+renderElement(siteMainElement, new ListSortView().getElement(), RenderPosition.BEFOREEND);
 renderTemplate(siteMainElement, createFilmsTemplate(), `beforeend`);
 
 const mainContentElement = siteMainElement.querySelector(`.films`);

@@ -1,5 +1,5 @@
 import ProfileView from "./view/profile";
-import {createSiteMenuTemplate} from "./view/site-menu";
+import SiteMenuView from "./view/site-menu";
 import {createListSortTemplate} from "./view/list-sort";
 import {createFilmsTemplate} from "./view/films";
 import {createMainFilmListTemplate} from "./view/main-film-list";
@@ -28,7 +28,7 @@ if (userViewedFilmAmount) {
   renderElement(siteHeaderElement, new ProfileView(userViewedFilmAmount).getElement(), RenderPosition.BEFOREEND);
 }
 
-renderTemplate(siteMainElement, createSiteMenuTemplate(filters), `beforeend`);
+renderElement(siteMainElement, new SiteMenuView(filters).getElement(), RenderPosition.BEFOREEND);
 renderTemplate(siteMainElement, createListSortTemplate(), `beforeend`);
 renderTemplate(siteMainElement, createFilmsTemplate(), `beforeend`);
 

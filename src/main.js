@@ -8,8 +8,8 @@ import FilmCardView from "./view/film-card";
 import LoadMoreBtnView from "./view/load-more-btn";
 import TopRatedFilmsView from "./view/top-rated-films";
 import MostCommentedFilmsView from "./view/most-commented-films";
+import FilmsAmountView from "./view/films-amount";
 import {createFilmDetailsTemplate} from "./view/film-details";
-import {createFilmsAmountTemplate} from "./view/films-amount";
 import {generateFilm} from "./mock/film";
 import {generateFilters} from "./mock/filters";
 import {renderTemplate, renderElement, RenderPosition} from "./helpers";
@@ -33,6 +33,7 @@ const mostCommentedFilms = films
 const siteBody = document.querySelector(`body`);
 const siteHeaderElement = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
+const siteFooterElement = siteBody.querySelector(`.footer`);
 
 if (userViewedFilmAmount) {
   renderElement(siteHeaderElement, new ProfileView(userViewedFilmAmount).getElement(), RenderPosition.BEFOREEND);
@@ -92,7 +93,6 @@ renderElement(
   mostCommentedFilmListComponent.getElement(),
   RenderPosition.BEFOREEND
 );
-
 mostCommentedFilms.forEach((film) =>
   renderElement(
     mostCommentedFilmListComponent.getElement(),
@@ -101,10 +101,7 @@ mostCommentedFilms.forEach((film) =>
   )
 );
 
-const siteFooterElement = siteBody.querySelector(`.footer`);
+const footerStatisticsElement = siteFooterElement.querySelector(`.footer__statistics`);
+renderElement(footerStatisticsElement, new FilmsAmountView(films.length).getElement(), RenderPosition.BEFOREEND);
 
 renderTemplate(siteFooterElement, createFilmDetailsTemplate(films[0]), `afterend`);
-
-const footerStatisticsElement = siteFooterElement.querySelector(`.footer__statistics`);
-
-renderTemplate(footerStatisticsElement, createFilmsAmountTemplate(films.length), `beforeend`);

@@ -35,6 +35,13 @@ const siteHeaderElement = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
 
+const renderFilmDetailsPopup = (film) => {
+  const filmDetailsComponent = new FilmDetailsView(film);
+  const filmDetailsPopupElement = filmDetailsComponent.getElement();
+
+  renderElement(siteBody, filmDetailsPopupElement, RenderPosition.BEFOREEND);
+};
+
 if (userViewedFilmAmount) {
   renderElement(siteHeaderElement, new ProfileView(userViewedFilmAmount).getElement(), RenderPosition.BEFOREEND);
 }
@@ -50,7 +57,22 @@ renderElement(filmsComponent.getElement(), allFilmsComponent.getElement(), Rende
 renderElement(allFilmsComponent.getElement(), allFilmListComponent.getElement(), RenderPosition.BEFOREEND);
 
 for (let i = 0; i < Math.min(films.length, FILMS_PER_STEP); i++) {
-  renderElement(allFilmListComponent.getElement(), new FilmCardView(films[i]).getElement(), RenderPosition.BEFOREEND);
+  const filmCardComponent = new FilmCardView(films[i]);
+  const filmCardElement = filmCardComponent.getElement();
+  const filmCardPosterElement = filmCardElement.querySelector(`.film-card__poster`);
+  const filmCardTitleElement = filmCardElement.querySelector(`.film-card__title`);
+  const filmCardCommentsElement = filmCardElement.querySelector(`.film-card__comments`);
+
+  const onFilmCardElementsClick = (evt) => {
+    evt.preventDefault();
+    renderFilmDetailsPopup(films[i]);
+  };
+
+  filmCardPosterElement.addEventListener(`click`, onFilmCardElementsClick);
+  filmCardTitleElement.addEventListener(`click`, onFilmCardElementsClick);
+  filmCardCommentsElement.addEventListener(`click`, onFilmCardElementsClick);
+
+  renderElement(allFilmListComponent.getElement(), filmCardComponent.getElement(), RenderPosition.BEFOREEND);
 }
 
 if (films.length > FILMS_PER_STEP) {
@@ -103,5 +125,3 @@ mostCommentedFilms.forEach((film) =>
 
 const footerStatisticsElement = siteFooterElement.querySelector(`.footer__statistics`);
 renderElement(footerStatisticsElement, new FilmsAmountView(films.length).getElement(), RenderPosition.BEFOREEND);
-
-renderElement(siteBody, new FilmDetailsView(films[0]).getElement(), RenderPosition.BEFOREEND);

@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {capitilizeString, getDurationString} from "../helpers";
+import {capitilizeString, createElement, getDurationString} from "../helpers";
 
 const YEAR_FORMAT = `YYYY`;
 
@@ -44,3 +44,26 @@ export const createFilmCardTemplate = (film) => {
     </div>
   </article>`;
 };
+
+export default class FilmCard {
+  constructor(film) {
+    this._element = null;
+    this._film = film;
+  }
+
+  getTemplate() {
+    return createFilmCardTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

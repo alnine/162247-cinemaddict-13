@@ -1,16 +1,18 @@
 import {createElement} from "../helpers";
 
-export const createLoadMoreBtnTemplate = () => {
-  return `<button class="films-list__show-more">Show more</button>`;
+export const createMostCommentedFilmsTemplate = () => {
+  return `<section class="films-list films-list--extra">
+    <h2 class="films-list__title">Most commented</h2>
+  </section>`;
 };
 
-export default class LoadMoreBtn {
+export default class MostCommentedFilms {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createLoadMoreBtnTemplate();
+    return createMostCommentedFilmsTemplate();
   }
 
   getElement() {

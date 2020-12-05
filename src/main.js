@@ -9,10 +9,10 @@ import LoadMoreBtnView from "./view/load-more-btn";
 import TopRatedFilmsView from "./view/top-rated-films";
 import MostCommentedFilmsView from "./view/most-commented-films";
 import FilmsAmountView from "./view/films-amount";
-import {createFilmDetailsTemplate} from "./view/film-details";
+import FilmDetailsView from "./view/film-details";
 import {generateFilm} from "./mock/film";
 import {generateFilters} from "./mock/filters";
-import {renderTemplate, renderElement, RenderPosition} from "./helpers";
+import {renderElement, RenderPosition} from "./helpers";
 
 const FILMS_COUNT = 19;
 const FILMS_PER_STEP = 5;
@@ -104,4 +104,4 @@ mostCommentedFilms.forEach((film) =>
 const footerStatisticsElement = siteFooterElement.querySelector(`.footer__statistics`);
 renderElement(footerStatisticsElement, new FilmsAmountView(films.length).getElement(), RenderPosition.BEFOREEND);
 
-renderTemplate(siteFooterElement, createFilmDetailsTemplate(films[0]), `afterend`);
+renderElement(siteBody, new FilmDetailsView(films[0]).getElement(), RenderPosition.BEFOREEND);

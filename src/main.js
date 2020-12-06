@@ -97,7 +97,9 @@ if (films.length > FILMS_PER_STEP) {
 
     films
       .slice(renderedFilmCount, renderedFilmCount + FILMS_PER_STEP)
-      .forEach((film) => renderElement(allFilmListComponent.getElement(), getFilmCardElement(film), RenderPosition.BEFOREEND));
+      .forEach((film) =>
+        renderElement(allFilmListComponent.getElement(), getFilmCardElement(film), RenderPosition.BEFOREEND)
+      );
 
     renderedFilmCount += FILMS_PER_STEP;
 
@@ -113,12 +115,18 @@ const topRatedFilmListComponent = new FilmListView();
 renderElement(filmsComponent.getElement(), topRatedFilmsComponent.getElement(), RenderPosition.BEFOREEND);
 renderElement(topRatedFilmsComponent.getElement(), topRatedFilmListComponent.getElement(), RenderPosition.BEFOREEND);
 
-topRatedFilms.forEach((film) => renderElement(topRatedFilmListComponent.getElement(), getFilmCardElement(film), RenderPosition.BEFOREEND));
+topRatedFilms.forEach((film) =>
+  renderElement(topRatedFilmListComponent.getElement(), getFilmCardElement(film), RenderPosition.BEFOREEND)
+);
 
 const mostCommentedFilmsComponent = new MostCommentedFilmsView();
 const mostCommentedFilmListComponent = new FilmListView();
 renderElement(filmsComponent.getElement(), mostCommentedFilmsComponent.getElement(), RenderPosition.BEFOREEND);
-renderElement(mostCommentedFilmsComponent.getElement(), mostCommentedFilmListComponent.getElement(), RenderPosition.BEFOREEND);
+renderElement(
+  mostCommentedFilmsComponent.getElement(),
+  mostCommentedFilmListComponent.getElement(),
+  RenderPosition.BEFOREEND
+);
 
 mostCommentedFilms.forEach((film) =>
   renderElement(mostCommentedFilmListComponent.getElement(), getFilmCardElement(film), RenderPosition.BEFOREEND)

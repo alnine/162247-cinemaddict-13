@@ -1,17 +1,18 @@
 import {createElement} from "../helpers";
 
-const createFilmsAmountTemplate = (amount) => {
-  return `<p>${amount} movies inside</p>`;
+export const createTopRatedFilmsTemplate = () => {
+  return `<section class="films-list films-list--extra">
+    <h2 class="films-list__title">Top rated</h2>
+  </section>`;
 };
 
-export default class FilmsAmount {
-  constructor(amount) {
+export default class TopRatedFilms {
+  constructor() {
     this._element = null;
-    this._amount = amount;
   }
 
   getTemplate() {
-    return createFilmsAmountTemplate(this._amount);
+    return createTopRatedFilmsTemplate();
   }
 
   getElement() {

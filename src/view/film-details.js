@@ -1,12 +1,12 @@
 import dayjs from "dayjs";
-import {capitilizeString, getDurationString} from "../helpers";
+import {capitilizeString, createElement, getDurationString} from "../helpers";
 import {createCommentTemplate} from "./comment-item";
 
 const generateGenreList = (genres) => {
   return genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join();
 };
 
-export const createFilmDetailsTemplate = (film) => {
+const createFilmDetailsTemplate = (film) => {
   const {
     title,
     originalTitle,
@@ -154,3 +154,26 @@ export const createFilmDetailsTemplate = (film) => {
     </form>
   </section>`;
 };
+
+export default class FilmDetails {
+  constructor(film) {
+    this._element = null;
+    this._film = film;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

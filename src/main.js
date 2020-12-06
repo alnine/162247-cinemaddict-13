@@ -35,18 +35,34 @@ const siteHeaderElement = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
 
+const closeFilmDetailsPopup = (component, container) => {
+  component.getElement().remove();
+  component.removeElement();
+  container.classList.remove(`hide-overflow`);
+};
+
 const renderFilmDetailsPopup = (film) => {
   const filmDetailsComponent = new FilmDetailsView(film);
   const filmDetailsPopupElement = filmDetailsComponent.getElement();
   const filmDetailsPopupCloseBtnElement = filmDetailsPopupElement.querySelector(`.film-details__close-btn`);
-  filmDetailsPopupCloseBtnElement.addEventListener(`click`, (evt) => {
-    evt.preventDefault();
-    filmDetailsPopupElement.remove();
-    filmDetailsComponent.removeElement();
-    siteBody.classList.remove(`hide-overflow`);
-  });
 
+  const onCloseBtnClick = (evt) => {
+    evt.preventDefault();
+    closeFilmDetailsPopup(filmDetailsComponent, siteBody);
+  };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      evt.preventDefault();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+      closeFilmDetailsPopup(filmDetailsComponent, siteBody);
+    }
+  };
+
+  document.addEventListener(`keydown`, onEscKeyDown);
+  filmDetailsPopupCloseBtnElement.addEventListener(`click`, onCloseBtnClick);
   siteBody.classList.add(`hide-overflow`);
+
   renderElement(siteBody, filmDetailsPopupElement, RenderPosition.BEFOREEND);
 };
 

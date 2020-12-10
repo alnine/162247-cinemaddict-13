@@ -27,13 +27,9 @@ const closeFilmDetailsPopup = (component, container) => {
 
 const renderFilmDetailsPopup = (film, container) => {
   const filmDetailsComponent = new FilmDetailsView(film);
-  const filmDetailsPopupElement = filmDetailsComponent.getElement();
-  const filmDetailsPopupCloseBtnElement = filmDetailsPopupElement.querySelector(`.film-details__close-btn`);
-
-  const onCloseBtnClick = (evt) => {
-    evt.preventDefault();
+  filmDetailsComponent.setOnCloseClickHandler(() => {
     closeFilmDetailsPopup(filmDetailsComponent, container);
-  };
+  });
 
   const onEscKeyDown = (evt) => {
     if (evt.key === `Escape` || evt.key === `Esc`) {
@@ -44,29 +40,16 @@ const renderFilmDetailsPopup = (film, container) => {
   };
 
   document.addEventListener(`keydown`, onEscKeyDown);
-  filmDetailsPopupCloseBtnElement.addEventListener(`click`, onCloseBtnClick);
   container.classList.add(`hide-overflow`);
 
-  renderElement(container, filmDetailsPopupElement, RenderPosition.BEFOREEND);
+  renderElement(container, filmDetailsComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
 const getFilmCardElement = (film, onClick) => {
   const filmCardComponent = new FilmCardView(film);
-  const filmCardElement = filmCardComponent.getElement();
-  const filmCardPosterElement = filmCardElement.querySelector(`.film-card__poster`);
-  const filmCardTitleElement = filmCardElement.querySelector(`.film-card__title`);
-  const filmCardCommentsElement = filmCardElement.querySelector(`.film-card__comments`);
+  filmCardComponent.setClickHandler(() => onClick(film));
 
-  const onFilmCardElementsClick = (evt) => {
-    evt.preventDefault();
-    onClick(film);
-  };
-
-  filmCardPosterElement.addEventListener(`click`, onFilmCardElementsClick);
-  filmCardTitleElement.addEventListener(`click`, onFilmCardElementsClick);
-  filmCardCommentsElement.addEventListener(`click`, onFilmCardElementsClick);
-
-  return filmCardElement;
+  return filmCardComponent.getElement();
 };
 
 const renderFilmsBoard = (container, films, onFilmCardClick) => {
@@ -103,9 +86,7 @@ const renderFilmsBoard = (container, films, onFilmCardClick) => {
     const loadMoreBtnComponent = new LoadMoreBtnView();
     renderElement(allFilmsComponent.getElement(), loadMoreBtnComponent.getElement(), RenderPosition.BEFOREEND);
 
-    loadMoreBtnComponent.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-
+    loadMoreBtnComponent.setClickHandler(() => {
       films
         .slice(renderedFilmCount, renderedFilmCount + FILMS_PER_STEP)
         .forEach((film) =>

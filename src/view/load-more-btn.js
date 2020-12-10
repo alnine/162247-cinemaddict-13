@@ -1,27 +1,11 @@
-import {createElement} from "../helpers";
+import AbstractView from "./abstract";
 
 export const createLoadMoreBtnTemplate = () => {
   return `<button class="films-list__show-more">Show more</button>`;
 };
 
-export default class LoadMoreBtn {
-  constructor() {
-    this._element = null;
-  }
-
+export default class LoadMoreBtn extends AbstractView {
   getTemplate() {
     return createLoadMoreBtnTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

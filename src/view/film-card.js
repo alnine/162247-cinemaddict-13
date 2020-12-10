@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import AbstractView from "./abstract";
-import {capitilizeString, getDurationString} from "../helpers";
+import {capitilizeString, getDurationString} from "../utils/common";
 
 const YEAR_FORMAT = `YYYY`;
 

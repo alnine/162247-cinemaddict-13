@@ -1,5 +1,5 @@
 import AbstractView from "./abstract";
-import {capitilizeString} from "../helpers";
+import {capitilizeString} from "../utils/common";
 
 const createSiteMenuItem = ({name, count}) => {
   return `<a href="#${name}" class="main-navigation__item">

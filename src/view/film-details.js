@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import AbstractView from "./abstract";
-import {capitilizeString, getDurationString} from "../helpers";
+import {capitilizeString, getDurationString} from "../utils/common";
 import {createCommentTemplate} from "./comment-item";
 
 const generateGenreList = (genres) => {

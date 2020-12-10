@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
-import {capitilizeString, createElement, getDurationString} from "../helpers";
+import AbstractView from "./abstract";
+import {capitilizeString, getDurationString} from "../helpers";
 
 const YEAR_FORMAT = `YYYY`;
 
@@ -45,25 +46,13 @@ export const createFilmCardTemplate = (film) => {
   </article>`;
 };
 
-export default class FilmCard {
+export default class FilmCard extends AbstractView {
   constructor(film) {
-    this._element = null;
+    super();
     this._film = film;
   }
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

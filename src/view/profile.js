@@ -1,4 +1,5 @@
-import {capitilizeString, createElement} from "../helpers";
+import AbstractView from "./abstract";
+import {capitilizeString} from "../helpers";
 
 const RatingsName = {
   NOVICE: `novice`,
@@ -24,7 +25,7 @@ const generateRating = (number) => {
   return rating;
 };
 
-export const createProfileTemplate = (filmsNumber) => {
+const createProfileTemplate = (filmsNumber) => {
   const profileRating = capitilizeString(generateRating(filmsNumber));
 
   return `<section class="header__profile profile">
@@ -33,25 +34,13 @@ export const createProfileTemplate = (filmsNumber) => {
   </section>`;
 };
 
-export default class Profile {
+export default class Profile extends AbstractView {
   constructor(filmsNumber) {
-    this._element = null;
+    super();
     this._filmsNumber = filmsNumber;
   }
 
   getTemplate() {
     return createProfileTemplate(this._filmsNumber);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

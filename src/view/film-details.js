@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import AbstractView from "./abstract";
 import {capitilizeString, createElement, getDurationString} from "../helpers";
 import {createCommentTemplate} from "./comment-item";
 
@@ -155,25 +156,13 @@ const createFilmDetailsTemplate = (film) => {
   </section>`;
 };
 
-export default class FilmDetails {
+export default class FilmDetails extends AbstractView {
   constructor(film) {
-    this._element = null;
+    super();
     this._film = film;
   }
 
   getTemplate() {
     return createFilmDetailsTemplate(this._film);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
-import {capitilizeString, createElement, getDurationString} from "../helpers";
+import AbstractView from "./abstract";
+import {capitilizeString, getDurationString} from "../utils/common";
 import {createCommentTemplate} from "./comment-item";
 
 const generateGenreList = (genres) => {
@@ -155,25 +156,29 @@ const createFilmDetailsTemplate = (film) => {
   </section>`;
 };
 
-export default class FilmDetails {
+export default class FilmDetails extends AbstractView {
   constructor(film) {
-    this._element = null;
+    super();
     this._film = film;
+    this._onCloseClickHandler = this._onCloseClickHandler.bind(this);
+  }
+
+  _getCloseBtnElement() {
+    return this.getElement().querySelector(`.film-details__close-btn`);
   }
 
   getTemplate() {
     return createFilmDetailsTemplate(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _onCloseClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.onCloseClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setOnCloseClickHandler(callback) {
+    this._callback.onCloseClick = callback;
+    const closeBtnElement = this._getCloseBtnElement();
+    closeBtnElement.addEventListener(`click`, this._onCloseClickHandler);
   }
 }

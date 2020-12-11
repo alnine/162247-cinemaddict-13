@@ -1,29 +1,13 @@
-import {createElement} from "../helpers";
+import AbstractView from "./abstract";
 
-export const createMainFilmListTemplate = () => {
+const createMainFilmListTemplate = () => {
   return `<section class="films-list">
     <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
   </section>`;
 };
 
-export default class AllFilms {
-  constructor() {
-    this._element = null;
-  }
-
+export default class AllFilms extends AbstractView {
   getTemplate() {
     return createMainFilmListTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

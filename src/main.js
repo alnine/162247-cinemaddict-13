@@ -3,12 +3,10 @@ import SiteMenuView from "./view/site-menu";
 import ListSortView from "./view/list-sort";
 import FilmsView from "./view/films";
 import NoFilmsView from "./view/no-films";
-import AllFilmsView from "./view/all-films";
-import FilmListView from "./view/film-list";
+import FilmsListView from "./view/films-list";
+import FilmsListContainerView from "./view/films-list-container";
 import FilmCardView from "./view/film-card";
 import LoadMoreBtnView from "./view/load-more-btn";
-import TopRatedFilmsView from "./view/top-rated-films";
-import MostCommentedFilmsView from "./view/most-commented-films";
 import FilmsAmountView from "./view/films-amount";
 import FilmDetailsView from "./view/film-details";
 import {generateFilm} from "./mock/film";
@@ -67,25 +65,25 @@ const renderFilmsBoard = (container, films, onFilmCardClick) => {
     .sort((a, b) => b.comments.length - a.comments.length)
     .slice(0, EXTRA_FILM_COUNT);
 
-  const allFilmsComponent = new AllFilmsView();
-  const allFilmListComponent = new FilmListView();
-  render(container, allFilmsComponent, RenderPosition.BEFOREEND);
-  render(allFilmsComponent, allFilmListComponent, RenderPosition.BEFOREEND);
+  const allFilmsListComponent = new FilmsListView("All movies. Upcoming", false, true);
+  const allFilmsContainerComponent = new FilmsListContainerView();
+  render(container, allFilmsListComponent, RenderPosition.BEFOREEND);
+  render(allFilmsListComponent, allFilmsContainerComponent, RenderPosition.BEFOREEND);
 
   for (let i = 0; i < Math.min(films.length, FILMS_PER_STEP); i++) {
-    render(allFilmListComponent, getFilmCardElement(films[i], onFilmCardClick), RenderPosition.BEFOREEND);
+    render(allFilmsContainerComponent, getFilmCardElement(films[i], onFilmCardClick), RenderPosition.BEFOREEND);
   }
 
   if (films.length > FILMS_PER_STEP) {
     let renderedFilmCount = FILMS_PER_STEP;
     const loadMoreBtnComponent = new LoadMoreBtnView();
-    render(allFilmsComponent, loadMoreBtnComponent, RenderPosition.BEFOREEND);
+    render(allFilmsListComponent, loadMoreBtnComponent, RenderPosition.BEFOREEND);
 
     loadMoreBtnComponent.setClickHandler(() => {
       films
         .slice(renderedFilmCount, renderedFilmCount + FILMS_PER_STEP)
         .forEach((film) =>
-          render(allFilmListComponent, getFilmCardElement(film, onFilmCardClick), RenderPosition.BEFOREEND)
+          render(allFilmsContainerComponent, getFilmCardElement(film, onFilmCardClick), RenderPosition.BEFOREEND)
         );
 
       renderedFilmCount += FILMS_PER_STEP;
@@ -96,22 +94,22 @@ const renderFilmsBoard = (container, films, onFilmCardClick) => {
     });
   }
 
-  const topRatedFilmsComponent = new TopRatedFilmsView();
-  const topRatedFilmListComponent = new FilmListView();
-  render(container, topRatedFilmsComponent, RenderPosition.BEFOREEND);
-  render(topRatedFilmsComponent, topRatedFilmListComponent, RenderPosition.BEFOREEND);
+  const topRatedFilmsListComponent = new FilmsListView(`Top rated`, true);
+  const topRatedFilmsContainerComponent = new FilmsListContainerView();
+  render(container, topRatedFilmsListComponent, RenderPosition.BEFOREEND);
+  render(topRatedFilmsListComponent, topRatedFilmsContainerComponent, RenderPosition.BEFOREEND);
 
   topRatedFilms.forEach((film) =>
-    render(topRatedFilmListComponent, getFilmCardElement(film, onFilmCardClick), RenderPosition.BEFOREEND)
+    render(topRatedFilmsContainerComponent, getFilmCardElement(film, onFilmCardClick), RenderPosition.BEFOREEND)
   );
 
-  const mostCommentedFilmsComponent = new MostCommentedFilmsView();
-  const mostCommentedFilmListComponent = new FilmListView();
-  render(container, mostCommentedFilmsComponent, RenderPosition.BEFOREEND);
-  render(mostCommentedFilmsComponent, mostCommentedFilmListComponent, RenderPosition.BEFOREEND);
+  const mostCommentedFilmsListComponent = new FilmsListView(`Most commented`, true);
+  const mostCommentedFilmsContainerComponent = new FilmsListContainerView();
+  render(container, mostCommentedFilmsListComponent, RenderPosition.BEFOREEND);
+  render(mostCommentedFilmsListComponent, mostCommentedFilmsContainerComponent, RenderPosition.BEFOREEND);
 
   mostCommentedFilms.forEach((film) =>
-    render(mostCommentedFilmListComponent, getFilmCardElement(film, onFilmCardClick), RenderPosition.BEFOREEND)
+    render(mostCommentedFilmsContainerComponent, getFilmCardElement(film, onFilmCardClick), RenderPosition.BEFOREEND)
   );
 };
 

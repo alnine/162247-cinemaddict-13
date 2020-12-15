@@ -8,6 +8,8 @@ import LoadMoreBtnView from "./view/load-more-btn";
 import FilmDetailsView from "./view/film-details";
 import {render, RenderPosition} from "../utils/render";
 
+const FILMS_PER_STEP = 5;
+
 export default class FilmsBoard {
   constructor(root, container) {
     this._root = root;
@@ -20,6 +22,7 @@ export default class FilmsBoard {
 
   init(films) {
     this._films = films.slice();
+    this._renderFilmsBoard();
   }
 
   _renderSort() {}
@@ -28,9 +31,30 @@ export default class FilmsBoard {
 
   _renderFilmCards() {}
 
+  _renderAllFilms() {}
+
+  _renderTopRatedFilms() {}
+
+  _renderMostCommentedFilms() {}
+
   _renderNoFilms() {}
 
   _renderLoadMoreButton() {}
 
-  _renderBoard() {}
+  _renderFilmsBoard() {
+    if (this._films.length === 0) {
+      this._renderNoFilms();
+      return;
+    }
+
+    this._renderSort();
+
+    this._renderAllFilms();
+    if (this._films.length > FILMS_PER_STEP) {
+      this._renderLoadMoreButton();
+    }
+
+    this._renderTopRatedFilms();
+    this._renderMostCommentedFilms();
+  }
 }

@@ -3,10 +3,10 @@ import FilmsView from "../view/films";
 import NoFilmsView from "../view/no-films";
 import FilmsListView from "../view/films-list";
 import FilmsListContainerView from "../view/films-list-container";
-import FilmCardView from "./view/film-card";
-import LoadMoreBtnView from "./view/load-more-btn";
-import FilmDetailsView from "./view/film-details";
-import {render, RenderPosition} from "../utils/render";
+import FilmCardView from "../view/film-card";
+import LoadMoreBtnView from "../view/load-more-btn";
+import FilmDetailsView from "../view/film-details";
+import {render, RenderPosition, remove} from "../utils/render";
 
 const FILMS_PER_STEP = 5;
 const EXTRA_FILM_COUNT = 2;
@@ -31,6 +31,8 @@ export default class FilmsBoard {
     this._sortComponent = new SortView();
     this._filmsBoardComponent = new FilmsView();
     this._noFilmsComponent = new NoFilmsView();
+
+    this._filmsDetailsComponent = null;
   }
 
   init(films) {
@@ -49,7 +51,36 @@ export default class FilmsBoard {
     render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
   }
 
-  _renderFilmCard(dist, film) {}
+  _removeFilmDetails() {
+    remove(this._filmsDetailsComponent);
+    this._filmsDetailsComponent = null;
+    this._root.classList.remove(`hide-overflow`);
+  }
+
+  _renderFilmDetails(film) {
+    this._filmDetailsComponent = new FilmDetailsView(film);
+    this._filmDetailsComponent.setOnCloseClickHandler(() => this._removeFilmDetails());
+
+    const onEscKeyDown = (evt) => {
+      if (evt.key === `Escape` || evt.key === `Esc`) {
+        evt.preventDefault();
+        document.removeEventListener(`keydown`, onEscKeyDown);
+        this._removeFilmDetails();
+      }
+    };
+
+    document.addEventListener(`keydown`, onEscKeyDown);
+    this._root.classList.add(`hide-overflow`);
+
+    render(this._root, this._filmsDetailsComponent, RenderPosition.BEFOREEND);
+  }
+
+  _renderFilmCard(dist, film) {
+    const filmCardComponent = new FilmCardView(film);
+    filmCardComponent.setClickHandler(() => this._renderFilmDetails(film));
+
+    render(dist, filmCardComponent, RenderPosition.BEFOREEND);
+  }
 
   _renderFilmsToList(films, list, from, to) {
     const listComponent = new FilmsListView(...FilmsListSettings[list]);
@@ -58,7 +89,7 @@ export default class FilmsBoard {
     render(this._filmsBoardComponent, listComponent, RenderPosition.BEFOREEND);
     render(listComponent, filmsContainer, RenderPosition.BEFOREEND);
 
-    this._films.slice(from, to).forEach((film) => this._renderFilmCard(filmsContainer, film));
+    films.slice(from, to).forEach((film) => this._renderFilmCard(filmsContainer, film));
   }
 
   _renderAllFilms() {

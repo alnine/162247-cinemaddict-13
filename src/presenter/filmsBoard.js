@@ -155,12 +155,7 @@ export default class FilmsBoard {
     });
   }
 
-  _renderFilmsBoard() {
-    if (this._films.length === 0) {
-      this._renderNoFilms();
-      return;
-    }
-
+  _renderFilms() {
     this._renderAllFilms(0, Math.min(this._films.length, FILMS_PER_STEP));
 
     if (this._films.length > FILMS_PER_STEP) {
@@ -169,5 +164,14 @@ export default class FilmsBoard {
 
     this._renderTopRatedFilms();
     this._renderMostCommentedFilms();
+  }
+
+  _renderFilmsBoard() {
+    if (this._films.length === 0) {
+      this._renderNoFilms();
+      return;
+    }
+
+    this._renderFilms();
   }
 }

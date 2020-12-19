@@ -2,7 +2,6 @@ import SortView from "../view/list-sort";
 import FilmsView from "../view/films";
 import NoFilmsView from "../view/no-films";
 import FilmsListView from "../view/films-list";
-import FilmsListContainerView from "../view/films-list-container";
 import FilmCardView from "../view/film-card";
 import LoadMoreBtnView from "../view/load-more-btn";
 import FilmDetailsView from "../view/film-details";
@@ -32,10 +31,10 @@ export default class FilmsBoard {
     this._filmsBoardComponent = new FilmsView();
     this._noFilmsComponent = new NoFilmsView();
 
-    this._filmsDetailsComponent = null;
-    this._allFilmsContainer = null;
-    this._topRatedContainer = null;
-    this._mostCommentedContainer = null;
+    this._filmDetailsComponent = null;
+    this._allFilmsListComponent = null;
+    this._topRatedListComponent = null;
+    this._mostCommentedListComponent = null;
   }
 
   init(films) {
@@ -55,8 +54,8 @@ export default class FilmsBoard {
   }
 
   _removeFilmDetails() {
-    remove(this._filmsDetailsComponent);
-    this._filmsDetailsComponent = null;
+    remove(this._filmDetailsComponent);
+    this._filmDetailsComponent = null;
     this._root.classList.remove(`hide-overflow`);
   }
 
@@ -75,7 +74,7 @@ export default class FilmsBoard {
     document.addEventListener(`keydown`, onEscKeyDown);
     this._root.classList.add(`hide-overflow`);
 
-    render(this._root, this._filmsDetailsComponent, RenderPosition.BEFOREEND);
+    render(this._root, this._filmDetailsComponent, RenderPosition.BEFOREEND);
   }
 
   _renderFilmCard(film, dist) {
@@ -85,34 +84,33 @@ export default class FilmsBoard {
     render(dist, filmCardComponent, RenderPosition.BEFOREEND);
   }
 
-  _createFilmsContainer(list) {
-    const listComponent = new FilmsListView(...FilmsListSettings[list]);
-    const filmsContainer = new FilmsListContainerView();
-
+  _renderFilmList(list) {
+    const listComponent = new FilmsListView(FilmsListSettings[list]);
     render(this._filmsBoardComponent, listComponent, RenderPosition.BEFOREEND);
-    render(listComponent, filmsContainer, RenderPosition.BEFOREEND);
 
-    return filmsContainer;
+    return listComponent;
   }
 
   _renderAllFilms(from, to) {
-    if (!this._allFilmsContainer) {
-      this._allFilmsContainer = this._createFilmsContainer(FilmsList.ALL);
+    if (!this._allFilmsListComponent) {
+      this._allFilmsListComponent = this._renderFilmList(FilmsList.ALL);
     }
 
-    this._films.slice(from, to).forEach((film) => this._renderFilmCard(film, this._allFilmsContainer));
+    this._films
+      .slice(from, to)
+      .forEach((film) => this._renderFilmCard(film, this._allFilmsListComponent.getContainer()));
   }
 
   _renderTopRatedFilms() {
-    if (!this._topRatedContainer) {
-      this._topRatedContainer = this._createFilmsContainer(FilmsList.TOP_RATED);
+    if (!this._topRatedListComponent) {
+      this._topRatedListComponent = this._renderFilmList(FilmsList.TOP_RATED);
     }
 
     this._films
       .filter((film) => film.totalRating)
       .sort((a, b) => b.totalRating - a.totalRating)
       .slice(0, EXTRA_FILM_COUNT)
-      .forEach((film) => this._renderFilmCard(film, this._topRatedContainer));
+      .forEach((film) => this._renderFilmCard(film, this._topRatedListComponent.getContainer()));
   }
 
   _renderMostCommentedFilms() {
@@ -122,14 +120,14 @@ export default class FilmsBoard {
       return;
     }
 
-    if (!this._mostCommentedContainer) {
-      this._mostCommentedContainer = this._createFilmsContainer(FilmsList.MOST_COMMENTED);
+    if (!this._mostCommentedListComponent) {
+      this._mostCommentedListComponent = this._renderFilmList(FilmsList.MOST_COMMENTED);
     }
 
     filmsWithComments
       .sort((a, b) => b.comments.length - a.comments.length)
       .slice(0, EXTRA_FILM_COUNT)
-      .forEach((film) => this._renderFilmCard(film, this._mostCommentedContainer));
+      .forEach((film) => this._renderFilmCard(film, this._mostCommentedListComponent.getContainer()));
   }
 
   _renderNoFilms() {
@@ -140,12 +138,12 @@ export default class FilmsBoard {
     let renderedFilmCount = FILMS_PER_STEP;
 
     const loadMoreBtnComponent = new LoadMoreBtnView();
-    render(this._allFilmsContainer, loadMoreBtnComponent, RenderPosition.BEFOREEND);
+    render(this._allFilmsListComponent, loadMoreBtnComponent, RenderPosition.BEFOREEND);
 
     loadMoreBtnComponent.setClickHandler(() => {
       this._films
         .slice(renderedFilmCount, renderedFilmCount + FILMS_PER_STEP)
-        .forEach((film) => this._renderFilmCard(film, this._allFilmsContainer));
+        .forEach((film) => this._renderFilmCard(film, this._allFilmsListComponent.getContainer()));
 
       renderedFilmCount += FILMS_PER_STEP;
 

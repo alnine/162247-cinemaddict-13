@@ -136,7 +136,24 @@ export default class FilmsBoard {
     render(this._filmsBoardComponent, this._noFilmsComponent, RenderPosition.AFTERBEGIN);
   }
 
-  _renderLoadMoreButton() {}
+  _renderLoadMoreButton() {
+    let renderedFilmCount = FILMS_PER_STEP;
+
+    const loadMoreBtnComponent = new LoadMoreBtnView();
+    render(this._allFilmsContainer, loadMoreBtnComponent, RenderPosition.BEFOREEND);
+
+    loadMoreBtnComponent.setClickHandler(() => {
+      this._films
+        .slice(renderedFilmCount, renderedFilmCount + FILMS_PER_STEP)
+        .forEach((film) => this._renderFilmCard(film, this._allFilmsContainer));
+
+      renderedFilmCount += FILMS_PER_STEP;
+
+      if (renderedFilmCount >= this._films.length) {
+        remove(loadMoreBtnComponent);
+      }
+    });
+  }
 
   _renderFilmsBoard() {
     if (this._films.length === 0) {

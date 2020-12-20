@@ -39,6 +39,7 @@ export default class FilmsBoard {
     this._mostCommentedListComponent = null;
 
     this._handleLoadMoreBtnClick = this._handleLoadMoreBtnClick.bind(this);
+    this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
   }
 
   init(films) {
@@ -57,26 +58,38 @@ export default class FilmsBoard {
     render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
   }
 
+  _handleEscKeyDown(evt) {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      evt.preventDefault();
+      this._removeFilmDetails();
+    }
+  }
+
+  _toggleOverlay() {
+    this._root.classList.toggle(`hide-overflow`);
+  }
+
+  _setDocumentEscKeyDownListener() {
+    document.addEventListener(`keydown`, this._handleEscKeyDown);
+  }
+
+  _unSetDocumentEscKeyDownListener() {
+    document.removeEventListener(`keydown`, this._handleEscKeyDown);
+  }
+
   _removeFilmDetails() {
     remove(this._filmDetailsComponent);
     this._filmDetailsComponent = null;
-    this._root.classList.remove(`hide-overflow`);
+    this._toggleOverlay();
+    this._unSetDocumentEscKeyDownListener();
   }
 
   _renderFilmDetails(film) {
     this._filmDetailsComponent = new FilmDetailsView(film);
     this._filmDetailsComponent.setOnCloseClickHandler(() => this._removeFilmDetails());
 
-    const onEscKeyDown = (evt) => {
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        evt.preventDefault();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-        this._removeFilmDetails();
-      }
-    };
-
-    document.addEventListener(`keydown`, onEscKeyDown);
-    this._root.classList.add(`hide-overflow`);
+    this._toggleOverlay();
+    this._setDocumentEscKeyDownListener();
 
     render(this._root, this._filmDetailsComponent, RenderPosition.BEFOREEND);
   }

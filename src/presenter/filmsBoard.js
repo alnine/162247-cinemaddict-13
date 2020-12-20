@@ -1,8 +1,8 @@
+import FilmCardPresenter from "./filmCard";
 import SortView from "../view/list-sort";
 import FilmsView from "../view/films";
 import NoFilmsView from "../view/no-films";
 import FilmsListView from "../view/films-list";
-import FilmCardView from "../view/film-card";
 import LoadMoreBtnView from "../view/load-more-btn";
 import FilmDetailsView from "../view/film-details";
 import {render, RenderPosition, remove} from "../utils/render";
@@ -82,10 +82,8 @@ export default class FilmsBoard {
   }
 
   _renderFilmCard(film, dist) {
-    const filmCardComponent = new FilmCardView(film);
-    filmCardComponent.setClickHandler(() => this._renderFilmDetails(film));
-
-    render(dist, filmCardComponent, RenderPosition.BEFOREEND);
+    const filmPresenter = new FilmCardPresenter(dist);
+    filmPresenter.init(film, this._renderFilmDetails.bind(this));
   }
 
   _renderFilmList(list) {

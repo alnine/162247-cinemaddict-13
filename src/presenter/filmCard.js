@@ -1,5 +1,5 @@
 import FilmCardView from "../view/film-card";
-import {render, RenderPosition} from "../utils/render";
+import {render, replace, remove, RenderPosition} from "../utils/render";
 
 export default class FilmCard {
   constructor(container) {
@@ -14,10 +14,23 @@ export default class FilmCard {
   init(film, onClick) {
     this._film = film;
     this._callback.onClick = onClick;
+
+    this._prevFilmCardComponent = this._filmCardComponent;
     this._filmCardComponent = new FilmCardView(this._film);
+
     this._filmCardComponent.setClickHandler(this._handleOnFilmCardClick);
 
-    render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
+    if (this._prevFilmCardComponent === null) {
+      render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
+      return;
+    }
+
+    replace(this._filmCardComponent, this._prevFilmCardComponent);
+    remove(this._prevFilmCardComponent);
+  }
+
+  destroy() {
+    remove(this._filmCardComponent);
   }
 
   _handleOnFilmCardClick() {

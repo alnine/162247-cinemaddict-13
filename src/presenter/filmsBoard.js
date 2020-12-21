@@ -6,6 +6,7 @@ import FilmsListView from "../view/films-list";
 import LoadMoreBtnView from "../view/load-more-btn";
 import FilmDetailsView from "../view/film-details";
 import {render, RenderPosition, remove} from "../utils/render";
+import {updateItem} from "../utils/common";
 
 const FILMS_PER_STEP = 5;
 const EXTRA_FILM_COUNT = 2;
@@ -44,6 +45,7 @@ export default class FilmsBoard {
 
     this._handleLoadMoreBtnClick = this._handleLoadMoreBtnClick.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
+    this._handleFilmChange = this._handleFilmChange.bind(this);
   }
 
   init(films) {
@@ -66,6 +68,25 @@ export default class FilmsBoard {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this._removeFilmDetails();
+    }
+  }
+
+  _handleFilmChange(updateFilm) {
+    this._films = updateItem(this._film, updateFilm);
+    this._updatePresenters(updateFilm);
+  }
+
+  _updatePresenters(updateFilm) {
+    if (this._allFilmCardPresenter[updateFilm.id]) {
+      this._allFilmCardPresenter[updateFilm.id].init(updateFilm);
+    }
+
+    if (this._topRatedFilmCardPresenter[updateFilm.id]) {
+      this._topRatedFilmCardPresenter[updateFilm.id].init(updateFilm);
+    }
+
+    if (this._mostCommentedFilmCardPresenter[updateFilm.id]) {
+      this._mostCommentedFilmCardPresenter[updateFilm.id].init(updateFilm);
     }
   }
 

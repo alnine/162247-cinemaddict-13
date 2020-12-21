@@ -120,8 +120,8 @@ export default class FilmsBoard {
   }
 
   _renderFilmCard(film, dist) {
-    const filmPresenter = new FilmCardPresenter(dist);
-    filmPresenter.init(film, this._renderFilmDetails.bind(this));
+    const filmPresenter = new FilmCardPresenter(dist, this._renderFilmDetails.bind(this));
+    filmPresenter.init(film);
 
     return filmPresenter;
   }

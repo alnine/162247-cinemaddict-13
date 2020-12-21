@@ -2,18 +2,17 @@ import FilmCardView from "../view/film-card";
 import {render, replace, remove, RenderPosition} from "../utils/render";
 
 export default class FilmCard {
-  constructor(container) {
+  constructor(container, openDetails) {
     this._container = container;
-    this._callback = {};
+    this._openDetails = openDetails;
 
     this._filmCardComponent = null;
 
     this._handleOnFilmCardClick = this._handleOnFilmCardClick.bind(this);
   }
 
-  init(film, onClick) {
+  init(film) {
     this._film = film;
-    this._callback.onClick = onClick;
 
     this._prevFilmCardComponent = this._filmCardComponent;
     this._filmCardComponent = new FilmCardView(this._film);
@@ -34,6 +33,6 @@ export default class FilmCard {
   }
 
   _handleOnFilmCardClick() {
-    this._callback.onClick(this._film);
+    this._openDetails(this._film);
   }
 }

@@ -72,7 +72,7 @@ export default class FilmsBoard {
   }
 
   _handleFilmChange(updateFilm) {
-    this._films = updateItem(this._film, updateFilm);
+    this._films = updateItem(this._films, updateFilm);
     this._updatePresenters(updateFilm);
   }
 
@@ -120,7 +120,7 @@ export default class FilmsBoard {
   }
 
   _renderFilmCard(film, dist) {
-    const filmPresenter = new FilmCardPresenter(dist, this._renderFilmDetails.bind(this));
+    const filmPresenter = new FilmCardPresenter(dist, this._renderFilmDetails.bind(this), this._handleFilmChange);
     filmPresenter.init(film);
 
     return filmPresenter;

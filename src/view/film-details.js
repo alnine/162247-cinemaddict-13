@@ -176,7 +176,7 @@ export default class FilmDetails extends AbstractView {
     this._callback.onCloseClick();
   }
 
-  setOnCloseClickHandler(callback) {
+  setCloseClickHandler(callback) {
     this._callback.onCloseClick = callback;
     const closeBtnElement = this._getCloseBtnElement();
     closeBtnElement.addEventListener(`click`, this._onCloseClickHandler);

@@ -1,10 +1,10 @@
 import FilmCardPresenter from "./filmCard";
+import FilmDetailsPresenter from "./filmDetails";
 import SortView from "../view/list-sort";
 import FilmsView from "../view/films";
 import NoFilmsView from "../view/no-films";
 import FilmsListView from "../view/films-list";
 import LoadMoreBtnView from "../view/load-more-btn";
-import FilmDetailsView from "../view/film-details";
 import {render, RenderPosition, remove} from "../utils/render";
 import {updateItem} from "../utils/common";
 
@@ -38,7 +38,8 @@ export default class FilmsBoard {
     this._noFilmsComponent = new NoFilmsView();
     this._loadMoreBtnComponent = new LoadMoreBtnView();
 
-    this._filmDetailsComponent = null;
+    this._filmDetailsPresenter = null;
+
     this._allFilmsListComponent = null;
     this._topRatedListComponent = null;
     this._mostCommentedListComponent = null;
@@ -46,6 +47,8 @@ export default class FilmsBoard {
     this._handleLoadMoreBtnClick = this._handleLoadMoreBtnClick.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
     this._handleFilmChange = this._handleFilmChange.bind(this);
+    this._handleCloseFilmDetails = this._handleCloseFilmDetails.bind(this);
+    this._renderFilmDetails = this._renderFilmDetails.bind(this);
   }
 
   init(films) {
@@ -67,7 +70,7 @@ export default class FilmsBoard {
   _handleEscKeyDown(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
-      this._removeFilmDetails();
+      this._handleCloseFilmDetails();
     }
   }
 
@@ -102,25 +105,23 @@ export default class FilmsBoard {
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
   }
 
-  _removeFilmDetails() {
-    remove(this._filmDetailsComponent);
-    this._filmDetailsComponent = null;
+  _handleCloseFilmDetails() {
+    this._filmDetailsPresenter.destroy();
+    this._filmDetailsPresenter = null;
     this._toggleOverlay();
     this._unSetDocumentEscKeyDownListener();
   }
 
   _renderFilmDetails(film) {
-    this._filmDetailsComponent = new FilmDetailsView(film);
-    this._filmDetailsComponent.setOnCloseClickHandler(() => this._removeFilmDetails());
+    this._filmDetailsPresenter = new FilmDetailsPresenter(this._root, this._handleCloseFilmDetails);
+    this._filmDetailsPresenter.init(film);
 
     this._toggleOverlay();
     this._setDocumentEscKeyDownListener();
-
-    render(this._root, this._filmDetailsComponent, RenderPosition.BEFOREEND);
   }
 
   _renderFilmCard(film, dist) {
-    const filmPresenter = new FilmCardPresenter(dist, this._renderFilmDetails.bind(this), this._handleFilmChange);
+    const filmPresenter = new FilmCardPresenter(dist, this._renderFilmDetails, this._handleFilmChange);
     filmPresenter.init(film);
 
     return filmPresenter;

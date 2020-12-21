@@ -91,6 +91,10 @@ export default class FilmsBoard {
     if (this._mostCommentedFilmCardPresenter[updateFilm.id]) {
       this._mostCommentedFilmCardPresenter[updateFilm.id].init(updateFilm);
     }
+
+    if (this._filmDetailsPresenter) {
+      this._filmDetailsPresenter.init(updateFilm);
+    }
   }
 
   _toggleOverlay() {
@@ -113,7 +117,16 @@ export default class FilmsBoard {
   }
 
   _renderFilmDetails(film) {
-    this._filmDetailsPresenter = new FilmDetailsPresenter(this._root, this._handleCloseFilmDetails);
+    if (this._filmDetailsPresenter !== null) {
+      this._handleCloseFilmDetails();
+    }
+
+    this._filmDetailsPresenter = new FilmDetailsPresenter(
+      this._root,
+      this._handleCloseFilmDetails,
+      this._handleFilmChange
+    );
+
     this._filmDetailsPresenter.init(film);
 
     this._toggleOverlay();

@@ -11,7 +11,7 @@ const createSortTemplate = (sortType) => {
     <li><a href="#" class="sort__button ${sortType === SortTypes.DATE ? activeClass : ""}" data-sort-type="${
     SortTypes.DATE
   }">Sort by date</a></li>
-    <li><a href="#" class="sort__button ${sortType === SortTypes.DATE ? activeClass : ""}" data-sort-type="${
+    <li><a href="#" class="sort__button ${sortType === SortTypes.RATING ? activeClass : ""}" data-sort-type="${
     SortTypes.RATING
   }">Sort by rating</a></li>
   </ul>`;

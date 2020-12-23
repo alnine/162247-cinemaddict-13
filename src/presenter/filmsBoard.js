@@ -7,6 +7,7 @@ import FilmsListView from "../view/films-list";
 import LoadMoreBtnView from "../view/load-more-btn";
 import {render, RenderPosition, remove} from "../utils/render";
 import {updateItem} from "../utils/common";
+import {sortFilmDateDown, sortFilmRatingDown} from "../utils/films";
 import {SortTypes} from "../constants";
 
 const FILMS_PER_STEP = 5;
@@ -51,10 +52,12 @@ export default class FilmsBoard {
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleCloseFilmDetails = this._handleCloseFilmDetails.bind(this);
     this._renderFilmDetails = this._renderFilmDetails.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init(films) {
     this._films = films.slice();
+    this._sourcedFilms = films.slice();
 
     this._renderFilmsBoard();
   }
@@ -65,6 +68,8 @@ export default class FilmsBoard {
     }
 
     this._sortComponent = new SortView(this._currentSortType);
+    this._sortComponent.setSortTypeChangeClickHandler(this._handleSortTypeChange);
+
     render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
   }
 
@@ -82,6 +87,31 @@ export default class FilmsBoard {
   _handleFilmChange(updateFilm) {
     this._films = updateItem(this._films, updateFilm);
     this._updatePresenters(updateFilm);
+  }
+
+  _handleSortTypeChange(sortType) {
+    if (sortType === this._currentSortType) {
+      return;
+    }
+
+    this._sortFilms(sortType);
+    this._clearFilms();
+    this._renderFilmsBoard();
+  }
+
+  _sortFilms(sortType) {
+    switch (sortType) {
+      case SortTypes.DATE:
+        this._films.sort(sortFilmDateDown);
+        break;
+      case SortTypes.RATING:
+        this._films.sort(sortFilmRatingDown);
+        break;
+      default:
+        this._films = this._sourcedFilms.slice();
+    }
+
+    this._currentSortType = sortType;
   }
 
   _updatePresenters(updateFilm) {
@@ -243,7 +273,6 @@ export default class FilmsBoard {
     this._renderedFilmsCount = FILMS_PER_STEP;
 
     remove(this._sortComponent);
-    remove(this._filmsBoardComponent);
     remove(this._loadMoreBtnComponent);
 
     this._sortComponent = null;

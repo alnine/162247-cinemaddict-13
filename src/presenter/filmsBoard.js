@@ -7,6 +7,7 @@ import FilmsListView from "../view/films-list";
 import LoadMoreBtnView from "../view/load-more-btn";
 import {render, RenderPosition, remove} from "../utils/render";
 import {updateItem} from "../utils/common";
+import {SortTypes} from "../constants";
 
 const FILMS_PER_STEP = 5;
 const EXTRA_FILM_COUNT = 2;
@@ -28,18 +29,19 @@ export default class FilmsBoard {
     this._root = root;
     this._container = container;
     this._renderedFilmsCount = FILMS_PER_STEP;
+    this._currentSortType = SortTypes.DEFAULT;
 
     this._allFilmCardPresenter = {};
     this._topRatedFilmCardPresenter = {};
     this._mostCommentedFilmCardPresenter = {};
 
-    this._sortComponent = new SortView();
     this._filmsBoardComponent = new FilmsView();
     this._noFilmsComponent = new NoFilmsView();
     this._loadMoreBtnComponent = new LoadMoreBtnView();
 
     this._filmDetailsPresenter = null;
 
+    this._sortComponent = null;
     this._allFilmsListComponent = null;
     this._topRatedListComponent = null;
     this._mostCommentedListComponent = null;
@@ -54,8 +56,6 @@ export default class FilmsBoard {
   init(films) {
     this._films = films.slice();
 
-    this._renderSort();
-    render(this._container, this._filmsBoardComponent, RenderPosition.BEFOREEND);
     this._renderFilmsBoard();
   }
 
@@ -64,7 +64,12 @@ export default class FilmsBoard {
       return;
     }
 
+    this._sortComponent = new SortView(this._currentSortType);
     render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
+  }
+
+  _renderFilmsBoardContainer() {
+    render(this._container, this._filmsBoardComponent, RenderPosition.BEFOREEND);
   }
 
   _handleEscKeyDown(evt) {
@@ -236,10 +241,18 @@ export default class FilmsBoard {
     this._mostCommentedFilmCardPresenter = {};
 
     this._renderedFilmsCount = FILMS_PER_STEP;
+
+    remove(this._sortComponent);
+    remove(this._filmsBoardComponent);
     remove(this._loadMoreBtnComponent);
+
+    this._sortComponent = null;
   }
 
   _renderFilmsBoard() {
+    this._renderSort();
+    this._renderFilmsBoardContainer();
+
     if (this._films.length === 0) {
       this._renderNoFilms();
       return;

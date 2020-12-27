@@ -195,6 +195,9 @@ export default class FilmDetails extends AbstractView {
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._changeCommentEmojiHandler = this._changeCommentEmojiHandler.bind(this);
+
+    this._setInnerHandlers();
   }
 
   static parseFilmToData(film) {
@@ -231,11 +234,16 @@ export default class FilmDetails extends AbstractView {
 
   updateElement() {
     const prevElement = this.getElement();
+    const prevElementScrollTop = prevElement.scrollTop;
     const parent = prevElement.parentElement;
+
     this.removeElement();
 
     const newElement = this.getElement();
+
     parent.replaceChild(newElement, prevElement);
+    newElement.scrollTo(0, prevElementScrollTop);
+    this.restoreHandlers();
   }
 
   _getCloseBtnElement() {
@@ -244,6 +252,14 @@ export default class FilmDetails extends AbstractView {
 
   _getFormElement() {
     return this.getElement().querySelector(`form`);
+  }
+
+  _changeCommentEmojiHandler(evt) {
+    evt.preventDefault();
+
+    this.updateData({
+      localComment: Object.assign({}, this._data.localComment, {emoji: evt.target.value}),
+    });
   }
 
   _closeBtnClickHandler(evt) {
@@ -277,13 +293,29 @@ export default class FilmDetails extends AbstractView {
     this._callback.formSubmit(FilmDetails.parseDataToFilm(this._data));
   }
 
+  _setInnerHandlers() {
+    this.getElement()
+      .querySelectorAll(`.film-details__emoji-item`)
+      .forEach((item) => item.addEventListener(`change`, this._changeCommentEmojiHandler));
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+
+    this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setCloseClickHandler(this._callback.onCloseClick);
+    this.setAddToWatchListClickHandler(this._callback.addToWatchClick);
+    this.setWatchedClickHandler(this._callback.watchedClick);
+    this.setFavoriteClickHandler(this._callback.favoriteClick);
+  }
+
   getTemplate() {
     return createFilmDetailsTemplate(this._data);
   }
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
-    this._getFormElement().addToWatchClick(`submit`, this._formSubmitHandler);
+    this._getFormElement().addEventListener(`submit`, this._formSubmitHandler);
   }
 
   setCloseClickHandler(callback) {

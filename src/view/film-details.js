@@ -220,16 +220,21 @@ export default class FilmDetails extends AbstractView {
     return film;
   }
 
+  updateElement() {
+    const prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.getElement();
+    parent.replaceChild(newElement, prevElement);
+  }
+
   _getCloseBtnElement() {
     return this.getElement().querySelector(`.film-details__close-btn`);
   }
 
   _getFormElement() {
     return this.getElement().querySelector(`form`);
-  }
-
-  getTemplate() {
-    return createFilmDetailsTemplate(this._data);
   }
 
   _closeBtnClickHandler(evt) {
@@ -261,6 +266,10 @@ export default class FilmDetails extends AbstractView {
     }
 
     this._callback.formSubmit(FilmDetails.parseDataToFilm(this._data));
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._data);
   }
 
   setFormSubmitHandler(callback) {

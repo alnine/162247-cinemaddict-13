@@ -196,6 +196,7 @@ export default class FilmDetails extends AbstractView {
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._changeCommentEmojiHandler = this._changeCommentEmojiHandler.bind(this);
+    this._inputCommentHandler = this._inputCommentHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -223,12 +224,17 @@ export default class FilmDetails extends AbstractView {
     return film;
   }
 
-  updateData(update) {
+  updateData(update, justDataUpdating = false) {
     if (!update) {
       return;
     }
 
     this._data = Object.assign({}, this._data, update);
+
+    if (justDataUpdating) {
+      return;
+    }
+
     this.updateElement();
   }
 
@@ -260,6 +266,17 @@ export default class FilmDetails extends AbstractView {
     this.updateData({
       localComment: Object.assign({}, this._data.localComment, {emoji: evt.target.value}),
     });
+  }
+
+  _inputCommentHandler(evt) {
+    evt.preventDefault();
+
+    this.updateData(
+      {
+        localComment: Object.assign({}, this._data.localComment, {comment: evt.target.value}),
+      },
+      true
+    );
   }
 
   _closeBtnClickHandler(evt) {
@@ -297,6 +314,10 @@ export default class FilmDetails extends AbstractView {
     this.getElement()
       .querySelectorAll(`.film-details__emoji-item`)
       .forEach((item) => item.addEventListener(`change`, this._changeCommentEmojiHandler));
+
+    this.getElement()
+      .querySelector(`.film-details__comment-input`)
+      .addEventListener(`input`, this._inputCommentHandler);
   }
 
   restoreHandlers() {

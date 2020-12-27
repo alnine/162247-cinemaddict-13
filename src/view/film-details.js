@@ -220,6 +220,15 @@ export default class FilmDetails extends AbstractView {
     return film;
   }
 
+  updateData(update) {
+    if (!update) {
+      return;
+    }
+
+    this._data = Object.assign({}, this._data, update);
+    this.updateElement();
+  }
+
   updateElement() {
     const prevElement = this.getElement();
     const parent = prevElement.parentElement;

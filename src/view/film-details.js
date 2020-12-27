@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import AbstractView from "./abstract";
+import SmartView from "./smart";
 import {createCommentTemplate} from "./comment-item";
 import {capitilizeString, getDurationString} from "../utils/common";
 import {NAMES} from "../mock/constants";
@@ -185,7 +185,7 @@ const createFilmDetailsTemplate = (film) => {
   </section>`;
 };
 
-export default class FilmDetails extends AbstractView {
+export default class FilmDetails extends SmartView {
   constructor(film) {
     super();
     this._data = FilmDetails.parseFilmToData(film);
@@ -222,34 +222,6 @@ export default class FilmDetails extends AbstractView {
     delete film.localComment;
 
     return film;
-  }
-
-  updateData(update, justDataUpdating = false) {
-    if (!update) {
-      return;
-    }
-
-    this._data = Object.assign({}, this._data, update);
-
-    if (justDataUpdating) {
-      return;
-    }
-
-    this.updateElement();
-  }
-
-  updateElement() {
-    const prevElement = this.getElement();
-    const prevElementScrollTop = prevElement.scrollTop;
-    const parent = prevElement.parentElement;
-
-    this.removeElement();
-
-    const newElement = this.getElement();
-
-    parent.replaceChild(newElement, prevElement);
-    newElement.scrollTo(0, prevElementScrollTop);
-    this.restoreHandlers();
   }
 
   _getCloseBtnElement() {

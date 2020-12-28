@@ -3,13 +3,6 @@ import relatimeTimePlugin from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relatimeTimePlugin);
 
-const EMOGI_IMAGE_URL = {
-  angry: `./images/emoji/angry.png`,
-  puke: `./images/emoji/puke.png`,
-  sleeping: `./images/emoji/sleeping.png`,
-  smile: `./images/emoji/smile.png`,
-};
-
 const generateDayString = (date) => {
   const currentYear = dayjs().year();
   const commentYear = dayjs(date).year();
@@ -26,7 +19,7 @@ export const createCommentTemplate = (comment) => {
 
   return `<li class="film-details__comment">
     <span class="film-details__comment-emoji">
-      <img src=${EMOGI_IMAGE_URL[emoji]} width="55" height="55" alt="emoji-${emoji}">
+      <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
     </span>
     <div>
       <p class="film-details__comment-text">${text}</p>

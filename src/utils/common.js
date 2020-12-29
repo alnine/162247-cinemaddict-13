@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const capitilizeString = (string) => {
   return string
     .split(` `)
@@ -8,11 +10,13 @@ export const capitilizeString = (string) => {
 };
 
 export const getDurationString = (minutes) => {
-  const minsInHour = 60;
-  const restMin = minutes % minsInHour;
-  const hours = (minutes - restMin) / minsInHour;
+  const date1 = dayjs();
+  const date2 = date1.add(minutes, "minute");
 
-  return `${hours}h ${restMin}m`;
+  const hours = date2.diff(date1, "hour");
+  const mins = date2.subtract(hours, "hour").diff(date1, "minute");
+
+  return `${hours}h ${mins}m`;
 };
 
 export const updateItem = (items, update) => {

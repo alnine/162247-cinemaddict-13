@@ -6,7 +6,7 @@ const EMOGIES = [`angry`, `puke`, `sleeping`, `smile`];
 const PHRASES = [`Interesting setting and a good cast`, `Booooooooooring`, `Very very old. Meh`];
 
 const generateDate = () => {
-  const year = getRandomInteger(0, 1);
+  const year = getRandomInteger(0, 3);
   const month = getRandomInteger(0, 3);
   const day = getRandomInteger(0, 6);
   const hour = getRandomInteger(0, 12);

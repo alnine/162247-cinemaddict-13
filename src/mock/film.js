@@ -59,7 +59,7 @@ export const generateFilm = () => {
     posterUrl: `${BASE_IMAGE_PATH}${FILM_IMAGE[title]}`,
     desc: generateDesc(),
     genres: [GENRES[getRandomInteger(0, GENRES.length - 1)]],
-    runtime: getRandomInteger(60, 180),
+    runtime: getRandomInteger(40, 180),
     releaseDate: generateReleaseDate(),
     country: COUNTRIES[getRandomInteger(0, COUNTRIES.length - 1)],
     ageRating: AGE_RATINGS[getRandomInteger(0, AGE_RATINGS.length - 1)],

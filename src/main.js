@@ -1,7 +1,8 @@
 import ProfileView from "./view/profile";
 import SiteMenuView from "./view/site-menu";
 import FilmsAmountView from "./view/films-amount";
-import FilmsBoard from "./presenter/filmsBoard";
+import FilmsBoardPresenter from "./presenter/filmsBoard";
+import FilmsModel from "./model/films";
 import {generateFilm} from "./mock/film";
 import {generateFilters} from "./mock/filters";
 import {render, RenderPosition} from "./utils/render";
@@ -23,9 +24,11 @@ if (userViewedFilmAmount) {
 
 render(siteMainElement, new SiteMenuView(filters), RenderPosition.BEFOREEND);
 
-const filmsBoard = new FilmsBoard(siteBody, siteMainElement);
+const filmsModel = new FilmsModel();
+filmsModel.setFilms(films);
 
-filmsBoard.init(films);
+const filmsBoardPresenter = new FilmsBoardPresenter(siteBody, siteMainElement, filmsModel);
+filmsBoardPresenter.init();
 
 const footerStatisticsElement = siteFooterElement.querySelector(`.footer__statistics`);
 render(footerStatisticsElement, new FilmsAmountView(films.length), RenderPosition.BEFOREEND);

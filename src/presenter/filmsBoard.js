@@ -26,9 +26,10 @@ const FilmsListSettings = {
 };
 
 export default class FilmsBoard {
-  constructor(root, container) {
+  constructor(root, container, filmsModel) {
     this._root = root;
     this._container = container;
+    this._filmsModel = filmsModel;
     this._renderedFilmsCount = FILMS_PER_STEP;
     this._currentSortType = SortTypes.DEFAULT;
 
@@ -55,15 +56,23 @@ export default class FilmsBoard {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
-  init(films) {
-    this._films = films.slice();
-    this._sourcedFilms = films.slice();
-
+  init() {
     this._renderFilmsBoard();
   }
 
+  _getFilms() {
+    switch (this._currentSortType) {
+      case SortTypes.DATE:
+        return this._filmsModel.getFilms().slice().sort(sortFilmDateDown);
+      case SortTypes.RATING:
+        return this._filmsModel.getFilms().slice().sort(sortFilmRatingDown);
+    }
+
+    return this._filmsModel.getFilms().slice();
+  }
+
   _renderSort() {
-    if (this._films.length === 0) {
+    if (this._getFilms().length === 0) {
       return;
     }
 
@@ -94,24 +103,9 @@ export default class FilmsBoard {
       return;
     }
 
-    this._sortFilms(sortType);
+    this._currentSortType = sortType;
     this._clearFilms();
     this._renderFilmsBoard();
-  }
-
-  _sortFilms(sortType) {
-    switch (sortType) {
-      case SortTypes.DATE:
-        this._films.sort(sortFilmDateDown);
-        break;
-      case SortTypes.RATING:
-        this._films.sort(sortFilmRatingDown);
-        break;
-      default:
-        this._films = this._sourcedFilms.slice();
-    }
-
-    this._currentSortType = sortType;
   }
 
   _updatePresenters(updateFilm) {
@@ -182,12 +176,12 @@ export default class FilmsBoard {
     return listComponent;
   }
 
-  _renderAllFilms(from, to) {
+  _renderAllFilms(films) {
     if (!this._allFilmsListComponent) {
       this._allFilmsListComponent = this._renderFilmList(FilmsList.ALL);
     }
 
-    this._films.slice(from, to).forEach((film) => {
+    films.forEach((film) => {
       const presenter = this._renderFilmCard(film, this._allFilmsListComponent.getContainer());
       this._allFilmCardPresenter[film.id] = presenter;
     });
@@ -198,7 +192,7 @@ export default class FilmsBoard {
       this._topRatedListComponent = this._renderFilmList(FilmsList.TOP_RATED);
     }
 
-    this._films
+    this._getFilms()
       .filter((film) => film.totalRating)
       .sort((a, b) => b.totalRating - a.totalRating)
       .slice(0, EXTRA_FILM_COUNT)
@@ -209,7 +203,7 @@ export default class FilmsBoard {
   }
 
   _renderMostCommentedFilms() {
-    const filmsWithComments = this._films.filter((film) => film.comments.length > 0);
+    const filmsWithComments = this._getFilms().filter((film) => film.comments.length > 0);
 
     if (filmsWithComments.length === 0) {
       return;
@@ -233,10 +227,14 @@ export default class FilmsBoard {
   }
 
   _handleLoadMoreBtnClick() {
-    this._renderAllFilms(this._renderedFilmsCount, this._renderedFilmsCount + FILMS_PER_STEP);
-    this._renderedFilmsCount += FILMS_PER_STEP;
+    const filmsCount = this._getFilms().length;
+    const newRenderedFilmCount = Math.min(filmsCount, this._renderedFilmsCount + FILMS_PER_STEP);
+    const films = this._getFilms().slice(this._renderedFilmsCount, newRenderedFilmCount);
 
-    if (this._renderedFilmsCount >= this._films.length) {
+    this._renderAllFilms(films);
+    this._renderedFilmsCount = newRenderedFilmCount;
+
+    if (this._renderedFilmsCount >= filmsCount) {
       remove(this._loadMoreBtnComponent);
     }
   }
@@ -247,9 +245,11 @@ export default class FilmsBoard {
   }
 
   _renderFilms() {
-    this._renderAllFilms(0, Math.min(this._films.length, FILMS_PER_STEP));
+    const filmCount = this._getFilms().length;
+    const films = this._getFilms().slice(0, Math.min(filmCount, FILMS_PER_STEP));
+    this._renderAllFilms(films);
 
-    if (this._films.length > FILMS_PER_STEP) {
+    if (filmCount > FILMS_PER_STEP) {
       this._renderLoadMoreButton();
     }
 
@@ -282,7 +282,7 @@ export default class FilmsBoard {
     this._renderSort();
     this._renderFilmsBoardContainer();
 
-    if (this._films.length === 0) {
+    if (this._getFilms().length === 0) {
       this._renderNoFilms();
       return;
     }

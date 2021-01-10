@@ -1,5 +1,6 @@
 import FilmCardView from "../view/film-card";
 import {render, replace, remove, RenderPosition} from "../utils/render";
+import {UserAction, UpdateType} from "../constants";
 
 export default class FilmCard {
   constructor(container, openDetails, changeFilm) {
@@ -44,14 +45,26 @@ export default class FilmCard {
   }
 
   _handleAddToWatchListClick() {
-    this._changeFilm(Object.assign({}, this._film, {isWatchList: !this._film.isWatchList}));
+    this._changeFilm(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      Object.assign({}, this._film, {isWatchList: !this._film.isWatchList})
+    );
   }
 
   _handleWatchedClick() {
-    this._changeFilm(Object.assign({}, this._film, {isWatched: !this._film.isWatched}));
+    this._changeFilm(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      Object.assign({}, this._film, {isWatched: !this._film.isWatched})
+    );
   }
 
   _handleFavoriteClick() {
-    this._changeFilm(Object.assign({}, this._film, {isFavorite: !this._film.isFavorite}));
+    this._changeFilm(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      Object.assign({}, this._film, {isFavorite: !this._film.isFavorite})
+    );
   }
 }

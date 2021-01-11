@@ -41,7 +41,7 @@ export default class FilmCard {
   }
 
   _handleOnFilmCardClick() {
-    this._openDetails(this._film);
+    this._openDetails(this._film.id);
   }
 
   _handleAddToWatchListClick() {

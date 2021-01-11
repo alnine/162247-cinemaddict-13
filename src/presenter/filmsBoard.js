@@ -40,6 +40,7 @@ export default class FilmsBoard {
     this._noFilmsComponent = new NoFilmsView();
     this._loadMoreBtnComponent = new LoadMoreBtnView();
 
+    this._filmDetailsId = null;
     this._filmDetailsPresenter = null;
 
     this._sortComponent = null;
@@ -51,8 +52,9 @@ export default class FilmsBoard {
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._handleCloseFilmDetails = this._handleCloseFilmDetails.bind(this);
-    this._renderFilmDetails = this._renderFilmDetails.bind(this);
+    this._сloseFilmDetails = this._сloseFilmDetails.bind(this);
+    this._openFilmDetails = this._openFilmDetails.bind(this);
+    this._getFilmById = this._getFilmById.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
@@ -71,6 +73,10 @@ export default class FilmsBoard {
     }
 
     return this._filmsModel.getFilms().slice();
+  }
+
+  _getFilmById(filmId) {
+    return this._filmsModel.getFilms().find((film) => film.id === filmId);
   }
 
   _renderSort() {
@@ -95,7 +101,7 @@ export default class FilmsBoard {
   _handleEscKeyDown(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
-      this._handleCloseFilmDetails();
+      this._сloseFilmDetails();
     }
   }
 
@@ -114,7 +120,7 @@ export default class FilmsBoard {
         this._renderFilmsBoard();
         break;
       case UpdateType.MAJOR:
-        this._clearFilms({resetRenderedFilmCount: true, resetCurrentSortType: true});
+        this._clearFilms({resetRenderedFilmCount: true, resetCurrentSortType: true, resetFilmDetails: true});
         this._renderFilmsBoard();
         break;
     }
@@ -160,32 +166,35 @@ export default class FilmsBoard {
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
   }
 
-  _handleCloseFilmDetails() {
+  _сloseFilmDetails() {
     this._filmDetailsPresenter.destroy();
+    this._filmDetailsId = null;
     this._filmDetailsPresenter = null;
     this._toggleOverlay();
     this._unSetDocumentEscKeyDownListener();
   }
 
-  _renderFilmDetails(film) {
+  _openFilmDetails(filmId) {
     if (this._filmDetailsPresenter !== null) {
-      this._handleCloseFilmDetails();
+      this._сloseFilmDetails();
     }
 
+    this._filmDetailsId = filmId;
     this._filmDetailsPresenter = new FilmDetailsPresenter(
       this._root,
-      this._handleCloseFilmDetails,
+      this._filmDetailsId,
+      this._getFilmById,
+      this._сloseFilmDetails,
       this._handleViewAction
     );
-
-    this._filmDetailsPresenter.init(film);
+    this._filmDetailsPresenter.init();
 
     this._toggleOverlay();
     this._setDocumentEscKeyDownListener();
   }
 
   _renderFilmCard(film, dist) {
-    const filmPresenter = new FilmCardPresenter(dist, this._renderFilmDetails, this._handleViewAction);
+    const filmPresenter = new FilmCardPresenter(dist, this._openFilmDetails, this._handleViewAction);
     filmPresenter.init(film);
 
     return filmPresenter;
@@ -272,7 +281,7 @@ export default class FilmsBoard {
     render(this._allFilmsListComponent, this._loadMoreBtnComponent, RenderPosition.BEFOREEND);
   }
 
-  _clearFilms({resetRenderedFilmCount = false, resetCurrentSortType = false} = {}) {
+  _clearFilms({resetRenderedFilmCount = false, resetCurrentSortType = false, resetFilmDetails = false} = {}) {
     const filmsCount = this._getFilms().length;
 
     const presenters = [
@@ -308,6 +317,10 @@ export default class FilmsBoard {
     if (resetCurrentSortType) {
       this._currentSortType = SortTypes.DEFAULT;
     }
+
+    if (resetFilmDetails) {
+      this._сloseFilmDetails();
+    }
   }
 
   _renderFilmsBoard() {
@@ -330,5 +343,9 @@ export default class FilmsBoard {
 
     this._renderTopRatedFilms(films);
     this._renderMostCommentedFilms(films);
+
+    if (this._filmDetailsPresenter) {
+      this._filmDetailsPresenter.init();
+    }
   }
 }

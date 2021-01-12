@@ -1,5 +1,6 @@
 import ProfileView from "./view/profile";
 import SiteMenuView from "./view/site-menu";
+import FiltersListView from "./view/filters-list";
 import FilmsAmountView from "./view/films-amount";
 import FilmsBoardPresenter from "./presenter/filmsBoard";
 import FilmsModel from "./model/films";
@@ -18,11 +19,14 @@ const siteHeaderElement = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
 
+const siteMenuComponent = new SiteMenuView();
+
 if (userViewedFilmAmount) {
   render(siteHeaderElement, new ProfileView(userViewedFilmAmount), RenderPosition.BEFOREEND);
 }
 
-render(siteMainElement, new SiteMenuView(filters), RenderPosition.BEFOREEND);
+render(siteMainElement, siteMenuComponent, RenderPosition.BEFOREEND);
+render(siteMenuComponent, new FiltersListView(filters), RenderPosition.AFTERBEGIN);
 
 const filmsModel = new FilmsModel();
 filmsModel.setFilms(films);

@@ -1,17 +1,21 @@
 import ProfileView from "./view/profile";
 import SiteMenuView from "./view/site-menu";
-import FiltersListView from "./view/filters-list";
 import FilmsAmountView from "./view/films-amount";
+import FiltersPresenter from "./presenter/filters";
 import FilmsBoardPresenter from "./presenter/filmsBoard";
+import FilterModel from "./model/filter";
 import FilmsModel from "./model/films";
 import {generateFilm} from "./mock/film";
-import {generateFilters} from "./mock/filters";
 import {render, RenderPosition} from "./utils/render";
 
 const FILMS_COUNT = 19;
 
 const films = new Array(FILMS_COUNT).fill().map(generateFilm);
-const filters = generateFilters(films);
+
+const filterModel = new FilterModel();
+const filmsModel = new FilmsModel();
+filmsModel.setFilms(films);
+
 const userViewedFilmAmount = films.filter((film) => film.isWatched).length;
 
 const siteBody = document.querySelector(`body`);
@@ -20,18 +24,18 @@ const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
 
 const siteMenuComponent = new SiteMenuView();
+const siteMenuElement = siteMenuComponent.getElement();
 
 if (userViewedFilmAmount) {
   render(siteHeaderElement, new ProfileView(userViewedFilmAmount), RenderPosition.BEFOREEND);
 }
 
-render(siteMainElement, siteMenuComponent, RenderPosition.BEFOREEND);
-render(siteMenuComponent, new FiltersListView(filters), RenderPosition.AFTERBEGIN);
+render(siteMainElement, siteMenuElement, RenderPosition.BEFOREEND);
 
-const filmsModel = new FilmsModel();
-filmsModel.setFilms(films);
+const filtersPresenter = new FiltersPresenter(siteMenuElement, filterModel, filmsModel);
+const filmsBoardPresenter = new FilmsBoardPresenter(siteBody, siteMainElement, filmsModel, filterModel);
 
-const filmsBoardPresenter = new FilmsBoardPresenter(siteBody, siteMainElement, filmsModel);
+filtersPresenter.init();
 filmsBoardPresenter.init();
 
 const footerStatisticsElement = siteFooterElement.querySelector(`.footer__statistics`);

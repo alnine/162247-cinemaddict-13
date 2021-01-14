@@ -16,6 +16,7 @@ export default class FilmDetails {
     this._handleAddToWatchListClick = this._handleAddToWatchListClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
   }
 
   init() {
@@ -33,6 +34,7 @@ export default class FilmDetails {
     this._filmDetailsComponent.setAddToWatchListClickHandler(this._handleAddToWatchListClick);
     this._filmDetailsComponent.setWatchedClickHandler(this._handleWatchedClick);
     this._filmDetailsComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._filmDetailsComponent.setFormSubmitHandler(this._handleFormSubmit);
 
     if (this._prevFilmDetailsComponent === null) {
       render(this._container, this._filmDetailsComponent, RenderPosition.BEFOREEND);
@@ -77,5 +79,9 @@ export default class FilmDetails {
       UpdateType.MINOR,
       Object.assign({}, this._film, {isFavorite: !this._film.isFavorite})
     );
+  }
+
+  _handleFormSubmit(update) {
+    this._changeFilm(UserAction.UPDATE_FILM, UpdateType.MINOR, update);
   }
 }

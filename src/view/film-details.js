@@ -194,6 +194,7 @@ export default class FilmDetails extends SmartView {
     this._addToWatchClickHandler = this._addToWatchClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._documentKeyDownHandler = this._documentKeyDownHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._changeCommentEmojiHandler = this._changeCommentEmojiHandler.bind(this);
     this._inputCommentHandler = this._inputCommentHandler.bind(this);
@@ -210,7 +211,7 @@ export default class FilmDetails extends SmartView {
   static parseDataToFilm(data) {
     const film = Object.assign({}, data);
 
-    const {emoji, comment} = this._data.localComment;
+    const {emoji, comment} = data.localComment;
     const newComment = {
       emoji,
       text: comment,
@@ -271,15 +272,21 @@ export default class FilmDetails extends SmartView {
     this._callback.favoriteClick();
   }
 
-  _formSubmitHandler(evt) {
-    evt.preventDefault();
-
+  _formSubmitHandler() {
     const {comment, emoji} = this._data.localComment;
     if (!comment || !emoji) {
       return;
     }
 
-    this._callback.formSubmit(FilmDetails.parseDataToFilm(this._data));
+    const update = FilmDetails.parseDataToFilm(this._data);
+    this._callback.formSubmit(update);
+  }
+
+  _documentKeyDownHandler(evt) {
+    if (evt.key === `Enter` && (evt.metaKey || evt.ctrlKey)) {
+      evt.preventDefault();
+      this._formSubmitHandler();
+    }
   }
 
   _setInnerHandlers() {
@@ -306,9 +313,14 @@ export default class FilmDetails extends SmartView {
     return createFilmDetailsTemplate(this._data);
   }
 
+  removeElement() {
+    this._element = null;
+    document.removeEventListener(`keydown`, this._documentKeyDownHandler);
+  }
+
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
-    this._getFormElement().addEventListener(`submit`, this._formSubmitHandler);
+    document.addEventListener(`keydown`, this._documentKeyDownHandler);
   }
 
   setCloseClickHandler(callback) {

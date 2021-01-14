@@ -3,7 +3,7 @@ import SmartView from "./smart";
 import {createCommentTemplate} from "./comment-item";
 import {capitilizeString, getDurationString} from "../utils/common";
 import {NAMES} from "../mock/constants";
-import {getRandomInteger} from "../mock/helpers";
+import {generateId, getRandomInteger} from "../mock/helpers";
 
 const DEFAULT_LOCAL_COMMENT = {
   comment: ``,
@@ -196,6 +196,7 @@ export default class FilmDetails extends SmartView {
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._documentKeyDownHandler = this._documentKeyDownHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._commentDeleteClickHandler = this._commentDeleteClickHandler.bind(this);
     this._changeCommentEmojiHandler = this._changeCommentEmojiHandler.bind(this);
     this._inputCommentHandler = this._inputCommentHandler.bind(this);
 
@@ -213,6 +214,7 @@ export default class FilmDetails extends SmartView {
 
     const {emoji, comment} = data.localComment;
     const newComment = {
+      id: generateId(),
       emoji,
       text: comment,
       author: NAMES[getRandomInteger(0, NAMES.length - 1)],
@@ -229,8 +231,8 @@ export default class FilmDetails extends SmartView {
     return this.getElement().querySelector(`.film-details__close-btn`);
   }
 
-  _getFormElement() {
-    return this.getElement().querySelector(`form`);
+  _getCommentListElement() {
+    return this.getElement().querySelector(`.film-details__comments-list`);
   }
 
   _changeCommentEmojiHandler(evt) {
@@ -289,6 +291,16 @@ export default class FilmDetails extends SmartView {
     }
   }
 
+  _commentDeleteClickHandler(evt) {
+    evt.preventDefault();
+
+    if (evt.target.tagName !== `BUTTON` && evt.target.textContent !== `Delete`) {
+      return;
+    }
+
+    this._callback.deleteCommentClick(evt.target.dataset.commentId);
+  }
+
   _setInnerHandlers() {
     this.getElement()
       .querySelectorAll(`.film-details__emoji-item`)
@@ -321,6 +333,11 @@ export default class FilmDetails extends SmartView {
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     document.addEventListener(`keydown`, this._documentKeyDownHandler);
+  }
+
+  setCommentDeleteHandler(callback) {
+    this._callback.deleteCommentClick = callback;
+    this._getCommentListElement().addEventListener(`click`, this._commentDeleteClickHandler);
   }
 
   setCloseClickHandler(callback) {

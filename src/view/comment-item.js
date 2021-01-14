@@ -4,7 +4,7 @@ import relatimeTimePlugin from "dayjs/plugin/relativeTime";
 dayjs.extend(relatimeTimePlugin);
 
 export const createCommentTemplate = (comment) => {
-  const {emoji, text, author, date} = comment;
+  const {id, emoji, text, author, date} = comment;
 
   return `<li class="film-details__comment">
     <span class="film-details__comment-emoji">
@@ -15,7 +15,7 @@ export const createCommentTemplate = (comment) => {
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${author}</span>
         <span class="film-details__comment-day">${dayjs(date).fromNow()}</span>
-        <button class="film-details__comment-delete">Delete</button>
+        <button data-comment-id=${id} class="film-details__comment-delete">Delete</button>
       </p>
     </div>
   </li>`;

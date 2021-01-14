@@ -17,6 +17,7 @@ export default class FilmDetails {
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._handleCommentDeleteClick = this._handleCommentDeleteClick.bind(this);
   }
 
   init() {
@@ -35,6 +36,7 @@ export default class FilmDetails {
     this._filmDetailsComponent.setWatchedClickHandler(this._handleWatchedClick);
     this._filmDetailsComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._filmDetailsComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._filmDetailsComponent.setCommentDeleteHandler(this._handleCommentDeleteClick);
 
     if (this._prevFilmDetailsComponent === null) {
       render(this._container, this._filmDetailsComponent, RenderPosition.BEFOREEND);
@@ -83,5 +85,15 @@ export default class FilmDetails {
 
   _handleFormSubmit(update) {
     this._changeFilm(UserAction.UPDATE_FILM, UpdateType.MINOR, update);
+  }
+
+  _handleCommentDeleteClick(commentId) {
+    const updateComments = this._film.comments.filter((comment) => comment.id.toString() !== commentId);
+
+    this._changeFilm(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      Object.assign({}, this._film, {comments: [...updateComments]})
+    );
   }
 }

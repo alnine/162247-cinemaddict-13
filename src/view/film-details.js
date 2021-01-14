@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import he from "he";
 import SmartView from "./smart";
 import {createCommentTemplate} from "./comment-item";
 import {capitilizeString, getDurationString} from "../utils/common";
@@ -146,7 +147,9 @@ const createFilmDetailsTemplate = (film) => {
             </div>
 
             <label class="film-details__comment-label">
-              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${comment}</textarea>
+              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(
+                comment
+              )}</textarea>
             </label>
 
             <div class="film-details__emoji-list">

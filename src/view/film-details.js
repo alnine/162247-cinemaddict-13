@@ -1,9 +1,10 @@
 import dayjs from "dayjs";
+import he from "he";
 import SmartView from "./smart";
 import {createCommentTemplate} from "./comment-item";
 import {capitilizeString, getDurationString} from "../utils/common";
 import {NAMES} from "../mock/constants";
-import {getRandomInteger} from "../mock/helpers";
+import {generateId, getRandomInteger} from "../mock/helpers";
 
 const DEFAULT_LOCAL_COMMENT = {
   comment: ``,
@@ -146,7 +147,9 @@ const createFilmDetailsTemplate = (film) => {
             </div>
 
             <label class="film-details__comment-label">
-              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${comment}</textarea>
+              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(
+                comment
+              )}</textarea>
             </label>
 
             <div class="film-details__emoji-list">
@@ -194,7 +197,9 @@ export default class FilmDetails extends SmartView {
     this._addToWatchClickHandler = this._addToWatchClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._documentKeyDownHandler = this._documentKeyDownHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._commentDeleteClickHandler = this._commentDeleteClickHandler.bind(this);
     this._changeCommentEmojiHandler = this._changeCommentEmojiHandler.bind(this);
     this._inputCommentHandler = this._inputCommentHandler.bind(this);
 
@@ -210,8 +215,9 @@ export default class FilmDetails extends SmartView {
   static parseDataToFilm(data) {
     const film = Object.assign({}, data);
 
-    const {emoji, comment} = this._data.localComment;
+    const {emoji, comment} = data.localComment;
     const newComment = {
+      id: generateId(),
       emoji,
       text: comment,
       author: NAMES[getRandomInteger(0, NAMES.length - 1)],
@@ -228,8 +234,8 @@ export default class FilmDetails extends SmartView {
     return this.getElement().querySelector(`.film-details__close-btn`);
   }
 
-  _getFormElement() {
-    return this.getElement().querySelector(`form`);
+  _getCommentListElement() {
+    return this.getElement().querySelector(`.film-details__comments-list`);
   }
 
   _changeCommentEmojiHandler(evt) {
@@ -271,15 +277,31 @@ export default class FilmDetails extends SmartView {
     this._callback.favoriteClick();
   }
 
-  _formSubmitHandler(evt) {
-    evt.preventDefault();
-
+  _formSubmitHandler() {
     const {comment, emoji} = this._data.localComment;
     if (!comment || !emoji) {
       return;
     }
 
-    this._callback.formSubmit(FilmDetails.parseDataToFilm(this._data));
+    const update = FilmDetails.parseDataToFilm(this._data);
+    this._callback.formSubmit(update);
+  }
+
+  _documentKeyDownHandler(evt) {
+    if (evt.key === `Enter` && (evt.metaKey || evt.ctrlKey)) {
+      evt.preventDefault();
+      this._formSubmitHandler();
+    }
+  }
+
+  _commentDeleteClickHandler(evt) {
+    evt.preventDefault();
+
+    if (evt.target.tagName !== `BUTTON` && evt.target.textContent !== `Delete`) {
+      return;
+    }
+
+    this._callback.deleteCommentClick(evt.target.dataset.commentId);
   }
 
   _setInnerHandlers() {
@@ -306,9 +328,19 @@ export default class FilmDetails extends SmartView {
     return createFilmDetailsTemplate(this._data);
   }
 
+  removeElement() {
+    this._element = null;
+    document.removeEventListener(`keydown`, this._documentKeyDownHandler);
+  }
+
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
-    this._getFormElement().addEventListener(`submit`, this._formSubmitHandler);
+    document.addEventListener(`keydown`, this._documentKeyDownHandler);
+  }
+
+  setCommentDeleteHandler(callback) {
+    this._callback.deleteCommentClick = callback;
+    this._getCommentListElement().addEventListener(`click`, this._commentDeleteClickHandler);
   }
 
   setCloseClickHandler(callback) {

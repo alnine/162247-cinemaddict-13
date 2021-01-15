@@ -1,13 +1,7 @@
 import dayjs from "dayjs";
 import {BASE_IMAGE_PATH, FILM_TITLES, FILM_IMAGE, FILM_DESC, GENRES, COUNTRIES, AGE_RATINGS, NAMES} from "./constants";
-import {getRandomInteger} from "./helpers";
+import {getRandomInteger, generateId} from "./helpers";
 import {generateComment} from "./comment";
-
-// Date.now() и Math.random() - плохие решения для генерации id
-// в "продуктовом" коде, а для моков самое то.
-// Для "продуктового" кода используйте что-то понадежнее,
-// вроде nanoid - https://github.com/ai/nanoid
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 const generateTitle = () => {
   return FILM_TITLES[getRandomInteger(0, FILM_TITLES.length - 1)];

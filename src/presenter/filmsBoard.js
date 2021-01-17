@@ -67,6 +67,10 @@ export default class FilmsBoard {
     this._renderFilmsBoard();
   }
 
+  destroy() {
+    this._clearFilms({resetRenderedFilmCount: true, resetCurrentSortType: true, resetFilmDetails: true});
+  }
+
   _getFilms() {
     const currentFilter = this._filterModel.getFilter();
     const films = this._filmsModel.getFilms().slice();

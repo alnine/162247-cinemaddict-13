@@ -1,6 +1,6 @@
 import FiltersListView from "../view/filters-list";
 import {remove, render, RenderPosition, replace} from "../utils/render";
-import {FilterType, UpdateType} from "../constants";
+import {FilterType, UpdateType, MenuItem} from "../constants";
 import {filter} from "../utils/filter";
 
 export default class Filters {
@@ -56,20 +56,24 @@ export default class Filters {
       {
         type: FilterType.ALL,
         name: `All movies`,
+        anchor: MenuItem.ALL,
       },
       {
         type: FilterType.WATCHLIST,
         name: `Watchlist`,
+        anchor: MenuItem.WATCHLIST,
         count: filter[FilterType.WATCHLIST](films).length,
       },
       {
         type: FilterType.HISTORY,
         name: `History`,
+        anchor: MenuItem.HISTORY,
         count: filter[FilterType.HISTORY](films).length,
       },
       {
         type: FilterType.FAVORITES,
         name: `Favorites`,
+        anchor: MenuItem.FAVORITES,
         count: filter[FilterType.FAVORITES](films).length,
       },
     ];

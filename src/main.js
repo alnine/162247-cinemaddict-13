@@ -26,7 +26,6 @@ const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
 
 const siteMenuComponent = new SiteMenuView();
-const statsComponent = new StatsView();
 
 if (userViewedFilmAmount) {
   render(siteHeaderElement, new ProfileView(userViewedFilmAmount), RenderPosition.BEFOREEND);
@@ -39,6 +38,8 @@ const filmsBoardPresenter = new FilmsBoardPresenter(siteBody, siteMainElement, f
 
 filtersPresenter.init();
 filmsBoardPresenter.init();
+
+let statsComponent = null;
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
@@ -55,6 +56,7 @@ const handleSiteMenuClick = (menuItem) => {
     case MenuItem.STATS:
       filmsBoardPresenter.destroy();
       filterModel.setFilter(null, FilterType.NONE);
+      statsComponent = new StatsView(filmsModel.getFilms());
       render(siteMainElement, statsComponent, RenderPosition.BEFOREEND);
       siteMenuComponent
         .getElement()

@@ -28,3 +28,11 @@ export const MenuItem = {
   FAVORITES: `favorites`,
   STATS: `stats`,
 };
+
+export const StatsFilterType = {
+  ALL_TIME: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`,
+};

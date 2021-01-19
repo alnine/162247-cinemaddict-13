@@ -1,11 +1,11 @@
 import AbstractView from "./abstract";
 
 const createFilterItem = (filter, currentFilterType) => {
-  const {type, name, count} = filter;
+  const {type, name, anchor, count} = filter;
   const countElement = count ? `<span class="main-navigation__item-count">${count}</span>` : ``;
-  const activeClass = currentFilterType === type ? `main-navigation__item--active` : ``;
+  const activeClass = currentFilterType === anchor ? `main-navigation__item--active` : ``;
 
-  return `<a href="#${type}" data-type=${type} class="main-navigation__item ${activeClass}">
+  return `<a href="#${anchor}" data-type=${type} data-anchor=${anchor} class="main-navigation__item ${activeClass}">
     ${name}
     ${countElement}
   </a>`;

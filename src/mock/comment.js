@@ -1,25 +1,8 @@
-import dayjs from "dayjs";
 import {NAMES} from "./constants";
-import {getRandomInteger, generateId} from "./helpers";
+import {getRandomInteger, generateId, generateDate} from "./helpers";
 
 const EMOGIES = [`angry`, `puke`, `sleeping`, `smile`];
 const PHRASES = [`Interesting setting and a good cast`, `Booooooooooring`, `Very very old. Meh`];
-
-const generateDate = () => {
-  const year = getRandomInteger(0, 3);
-  const month = getRandomInteger(0, 3);
-  const day = getRandomInteger(0, 6);
-  const hour = getRandomInteger(0, 12);
-  const min = getRandomInteger(0, 30);
-
-  return dayjs()
-    .subtract(year, `year`)
-    .subtract(month, `month`)
-    .subtract(day, `day`)
-    .subtract(hour, `hour`)
-    .subtract(min, `minute`)
-    .toDate();
-};
 
 export const generateComment = () => {
   return {

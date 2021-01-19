@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import {BASE_IMAGE_PATH, FILM_TITLES, FILM_IMAGE, FILM_DESC, GENRES, COUNTRIES, AGE_RATINGS, NAMES} from "./constants";
-import {getRandomInteger, generateId} from "./helpers";
+import {getRandomInteger, generateId, generateDate} from "./helpers";
 import {generateComment} from "./comment";
 
 const generateTitle = () => {
@@ -45,6 +45,8 @@ const generateReleaseDate = () => {
 export const generateFilm = () => {
   const title = generateTitle();
   generateReleaseDate();
+  const isWatched = Boolean(getRandomInteger(0, 1));
+  const watchingDate = isWatched ? generateDate() : null;
 
   return {
     id: generateId(),
@@ -63,7 +65,8 @@ export const generateFilm = () => {
     writers: [NAMES[getRandomInteger(0, NAMES.length - 1)]],
     actors: [NAMES[getRandomInteger(0, NAMES.length - 1)]],
     isWatchList: Boolean(getRandomInteger(0, 1)),
-    isWatched: Boolean(getRandomInteger(0, 1)),
+    isWatched,
     isFavorite: Boolean(getRandomInteger(0, 1)),
+    watchingDate,
   };
 };

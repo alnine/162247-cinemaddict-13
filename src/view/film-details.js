@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import he from "he";
 import SmartView from "./smart";
 import {createCommentTemplate} from "./comment-item";
-import {capitilizeString, getDurationString} from "../utils/common";
+import {capitilizeString, getDuration} from "../utils/common";
 import {NAMES} from "../mock/constants";
 import {generateId, getRandomInteger} from "../mock/helpers";
 
@@ -49,6 +49,9 @@ const createFilmDetailsTemplate = (film) => {
     .map(createCommentTemplate)
     .join(``);
 
+  const {hours, mins} = getDuration(runtime);
+  const duration = `${hours}h ${mins}m`;
+
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
       <div class="film-details__top-container">
@@ -93,7 +96,7 @@ const createFilmDetailsTemplate = (film) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
-                <td class="film-details__cell">${getDurationString(runtime)}</td>
+                <td class="film-details__cell">${duration}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>

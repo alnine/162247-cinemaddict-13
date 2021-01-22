@@ -3,6 +3,7 @@ import FilmDetailsPresenter from "./filmDetails";
 import SortView from "../view/list-sort";
 import FilmsView from "../view/films";
 import NoFilmsView from "../view/no-films";
+import LoadingView from "../view/loading";
 import FilmsListView from "../view/films-list";
 import LoadMoreBtnView from "../view/load-more-btn";
 import {render, RenderPosition, remove} from "../utils/render";
@@ -28,6 +29,7 @@ const FilmsListSettings = {
 export default class FilmsBoard {
   constructor(root, container, filmsModel, filterModel) {
     this._root = root;
+    this._isLoading = true;
     this._container = container;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
@@ -40,6 +42,7 @@ export default class FilmsBoard {
 
     this._filmsBoardComponent = new FilmsView();
     this._noFilmsComponent = new NoFilmsView();
+    this._loadingComponent = new LoadingView();
     this._loadMoreBtnComponent = new LoadMoreBtnView();
 
     this._filmDetailsId = null;
@@ -132,6 +135,11 @@ export default class FilmsBoard {
         break;
       case UpdateType.MAJOR:
         this._clearFilms({resetRenderedFilmCount: true, resetCurrentSortType: true, resetFilmDetails: true});
+        this._renderFilmsBoard();
+        break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
         this._renderFilmsBoard();
         break;
     }
@@ -250,6 +258,10 @@ export default class FilmsBoard {
       });
   }
 
+  _renderLoading() {
+    render(this._filmsBoardComponent, this._loadingComponent, RenderPosition.AFTERBEGIN);
+  }
+
   _renderNoFilms() {
     render(this._filmsBoardComponent, this._noFilmsComponent, RenderPosition.AFTERBEGIN);
   }
@@ -326,6 +338,11 @@ export default class FilmsBoard {
 
     this._renderSort();
     this._renderFilmsBoardContainer();
+
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
 
     if (filmsCount === 0) {
       this._renderNoFilms();

@@ -9,8 +9,19 @@ import FilmsModel from "./model/films";
 import {generateFilm} from "./mock/film";
 import {remove, render, RenderPosition} from "./utils/render";
 import {FilterType, MenuItem} from "./constants";
+import Api from "./api";
 
 const FILMS_COUNT = 19;
+const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
+const AUTHORIZATION = `Basic cwoimpksdljlfdkJ`;
+
+const api = new Api(END_POINT, AUTHORIZATION);
+
+api.getFilms().then((films) => {
+  films.forEach((film) => {
+    console.log(film);
+  });
+});
 
 const films = new Array(FILMS_COUNT).fill().map(generateFilm);
 

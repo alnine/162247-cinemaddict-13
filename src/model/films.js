@@ -6,7 +6,7 @@ export default class Films extends Observer {
     this._films = [];
   }
 
-  static adaptToClient(film) {
+  static adaptFilmToClient(film) {
     const {id, film_info: filmInfo, comments, user_details: userInfo} = film;
 
     const filmDetails = {
@@ -35,7 +35,7 @@ export default class Films extends Observer {
     return Object.assign({}, {id, comments: [...comments]}, filmDetails, userDetails);
   }
 
-  static adaptToServer(film) {
+  static adaptFilmToServer(film) {
     const filmDetails = {
       title: film.title,
       ["alternative_title"]: film.originalTitle,
@@ -46,7 +46,7 @@ export default class Films extends Observer {
       writers: [...film.writers],
       actors: [...film.actors],
       release: {
-        date: film.date.toISOString(),
+        date: film.releaseDate.toISOString(),
         ["release_country"]: film.country,
       },
       runtime: film.runtime,
@@ -67,6 +67,19 @@ export default class Films extends Observer {
       ["film_info"]: Object.assign({}, filmDetails),
       ["user_details"]: Object.assign({}, userDetails),
     };
+  }
+
+  static adaptCommentToClient(comment) {
+    const adaptedComment = Object.assign({}, comment, {
+      text: comment.comment,
+      date: new Date(comment.date),
+      emoji: comment.emotion,
+    });
+
+    delete adaptedComment.comment;
+    delete adaptedComment.emotion;
+
+    return adaptedComment;
   }
 
   setFilms(updateType, films) {

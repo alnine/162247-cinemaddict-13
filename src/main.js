@@ -27,7 +27,7 @@ const filmsModel = new FilmsModel();
 const siteMenuComponent = new SiteMenuView();
 
 const filtersPresenter = new FiltersPresenter(siteMenuComponent, filterModel, filmsModel);
-const filmsBoardPresenter = new FilmsBoardPresenter(siteBody, siteMainElement, filmsModel, filterModel);
+const filmsBoardPresenter = new FilmsBoardPresenter(siteBody, siteMainElement, filmsModel, filterModel, api);
 
 let statsComponent = null;
 

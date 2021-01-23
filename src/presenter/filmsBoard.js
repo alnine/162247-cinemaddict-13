@@ -27,12 +27,13 @@ const FilmsListSettings = {
 };
 
 export default class FilmsBoard {
-  constructor(root, container, filmsModel, filterModel) {
+  constructor(root, container, filmsModel, filterModel, api) {
     this._root = root;
     this._isLoading = true;
     this._container = container;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
+    this._api = api;
     this._renderedFilmsCount = FILMS_PER_STEP;
     this._currentSortType = SortTypes.DEFAULT;
 
@@ -90,7 +91,7 @@ export default class FilmsBoard {
   }
 
   _getFilmById(filmId) {
-    return this._filmsModel.getFilms().find((film) => film.id === filmId);
+    return this._filmsModel.getFilms().find((f) => f.id === filmId);
   }
 
   _renderSort() {
@@ -122,7 +123,9 @@ export default class FilmsBoard {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this._filmsModel.updateFilm(updateType, update);
+        this._api.updateFilm(update).then((updatedFilm) => {
+          this._filmsModel.updateFilm(updateType, updatedFilm);
+        });
         break;
     }
   }
@@ -188,6 +191,7 @@ export default class FilmsBoard {
     this._filmDetailsPresenter = new FilmDetailsPresenter(
       this._root,
       this._filmDetailsId,
+      this._api,
       this._getFilmById,
       this._сloseFilmDetails,
       this._handleViewAction

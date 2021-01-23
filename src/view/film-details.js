@@ -12,7 +12,7 @@ const DEFAULT_LOCAL_COMMENT = {
 };
 
 const generateGenreList = (genres) => {
-  return genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join();
+  return genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join("");
 };
 
 const createFilmDetailsTemplate = (film) => {

@@ -3,9 +3,10 @@ import {remove, render, RenderPosition, replace} from "../utils/render";
 import {UserAction, UpdateType} from "../constants";
 
 export default class FilmDetails {
-  constructor(container, filmId, getFilmById, closeDetails, changeFilm) {
+  constructor(container, filmId, api, getFilmById, closeDetails, changeFilm) {
     this._container = container;
     this._filmId = filmId;
+    this._api = api;
     this._getFilmById = getFilmById;
     this._closeDetails = closeDetails;
     this._changeFilm = changeFilm;
@@ -27,7 +28,24 @@ export default class FilmDetails {
       this._closeDetails();
     }
 
-    this._film = film;
+    this._api
+      .getComments(this._filmId)
+      .then((comments) => Object.assign({}, film, {comments}))
+      .then((filmWithComments) => {
+        this._film = filmWithComments;
+        this._renderFilmDetails();
+      })
+      .catch(() => {
+        this._film = Object.assign({}, film, {comments: []});
+      })
+      .finally(() => this._renderFilmDetails());
+  }
+
+  destroy() {
+    remove(this._filmDetailsComponent);
+  }
+
+  _renderFilmDetails() {
     this._prevFilmDetailsComponent = this._filmDetailsComponent;
     this._filmDetailsComponent = new FilmDetailsView(this._film);
 
@@ -51,10 +69,6 @@ export default class FilmDetails {
     remove(this._prevFilmDetailsComponent);
   }
 
-  destroy() {
-    remove(this._filmDetailsComponent);
-  }
-
   _handleOnCloseBtnClick() {
     this._closeDetails();
   }
@@ -63,7 +77,10 @@ export default class FilmDetails {
     this._changeFilm(
       UserAction.UPDATE_FILM,
       UpdateType.MINOR,
-      Object.assign({}, this._film, {isWatchList: !this._film.isWatchList})
+      Object.assign({}, this._film, {
+        isWatchList: !this._film.isWatchList,
+        comments: this._film.comments.map((comment) => comment.id),
+      })
     );
   }
 
@@ -71,7 +88,10 @@ export default class FilmDetails {
     this._changeFilm(
       UserAction.UPDATE_FILM,
       UpdateType.MINOR,
-      Object.assign({}, this._film, {isWatched: !this._film.isWatched})
+      Object.assign({}, this._film, {
+        isWatched: !this._film.isWatched,
+        comments: this._film.comments.map((comment) => comment.id),
+      })
     );
   }
 
@@ -79,7 +99,10 @@ export default class FilmDetails {
     this._changeFilm(
       UserAction.UPDATE_FILM,
       UpdateType.MINOR,
-      Object.assign({}, this._film, {isFavorite: !this._film.isFavorite})
+      Object.assign({}, this._film, {
+        isFavorite: !this._film.isFavorite,
+        comments: this._film.comments.map((comment) => comment.id),
+      })
     );
   }
 

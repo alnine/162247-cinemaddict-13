@@ -106,17 +106,23 @@ export default class FilmDetails {
     );
   }
 
-  _handleFormSubmit(update) {
-    this._changeFilm(UserAction.UPDATE_FILM, UpdateType.MINOR, update);
+  _handleFormSubmit({filmId, comment}) {
+    this._api.createComment(filmId, comment).then((update) => {
+      this._changeFilm(UserAction.UPDATE_FILM, UpdateType.MINOR, update);
+    });
   }
 
   _handleCommentDeleteClick(commentId) {
-    const updateComments = this._film.comments.filter((comment) => comment.id.toString() !== commentId);
+    this._api.deleteComment(commentId).then(() => {
+      const updateComments = this._film.comments.filter((comment) => comment.id.toString() !== commentId);
 
-    this._changeFilm(
-      UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
-      Object.assign({}, this._film, {comments: [...updateComments]})
-    );
+      this._changeFilm(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        Object.assign({}, this._film, {
+          comments: updateComments.map((comment) => comment.id),
+        })
+      );
+    });
   }
 }

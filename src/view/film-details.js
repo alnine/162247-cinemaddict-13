@@ -3,8 +3,6 @@ import he from "he";
 import SmartView from "./smart";
 import {createCommentTemplate} from "./comment-item";
 import {capitilizeString, getDuration} from "../utils/common";
-import {NAMES} from "../mock/constants";
-import {generateId, getRandomInteger} from "../mock/helpers";
 
 const DEFAULT_LOCAL_COMMENT = {
   comment: ``,
@@ -215,22 +213,13 @@ export default class FilmDetails extends SmartView {
     });
   }
 
-  static parseDataToFilm(data) {
-    const film = Object.assign({}, data);
-
-    const {emoji, comment} = data.localComment;
-    const newComment = {
-      id: generateId(),
-      emoji,
-      text: comment,
-      author: NAMES[getRandomInteger(0, NAMES.length - 1)],
-      date: dayjs().toDate(),
+  static parseDataToCreateComment(data) {
+    return {
+      filmId: data.id,
+      comment: Object.assign({}, data.localComment, {
+        date: dayjs().toDate(),
+      }),
     };
-
-    film.comments = [...film.comments, newComment];
-    delete film.localComment;
-
-    return film;
   }
 
   _getCloseBtnElement() {
@@ -286,7 +275,7 @@ export default class FilmDetails extends SmartView {
       return;
     }
 
-    const update = FilmDetails.parseDataToFilm(this._data);
+    const update = FilmDetails.parseDataToCreateComment(this._data);
     this._callback.formSubmit(update);
   }
 

@@ -82,6 +82,17 @@ export default class Films extends Observer {
     return adaptedComment;
   }
 
+  static adaptCommentToServer(comment) {
+    const adaptedComment = Object.assign({}, comment, {
+      emotion: comment.emoji,
+      date: comment.date.toISOString(),
+    });
+
+    delete adaptedComment.emoji;
+
+    return adaptedComment;
+  }
+
   setFilms(updateType, films) {
     this._films = films.slice();
     this._notify(updateType);

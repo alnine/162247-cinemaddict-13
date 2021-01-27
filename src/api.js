@@ -27,7 +27,7 @@ export default class Api {
   }
 
   static catchError(err) {
-    return err;
+    throw new Error(err);
   }
 
   static toJSON(response) {

@@ -37,3 +37,9 @@ export const StatsFilterType = {
   MONTH: `month`,
   YEAR: `year`,
 };
+
+export const RatingName = {
+  NOVICE: `Novice`,
+  FAN: `Fan`,
+  MOVIE_BUFF: `Movie Buff`,
+};

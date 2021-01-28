@@ -2,6 +2,12 @@ import FilmDetailsView from "../view/film-details";
 import {remove, render, RenderPosition, replace} from "../utils/render";
 import {UserAction, UpdateType} from "../constants";
 
+const State = {
+  DISABLING: `DISABLING`,
+  DELETING: `DELETING`,
+  ABORTING: `ABORTING`,
+};
+
 export default class FilmDetails {
   constructor(container, filmId, api, getFilmById, closeDetails, changeFilm) {
     this._container = container;
@@ -69,6 +75,37 @@ export default class FilmDetails {
     remove(this._prevFilmDetailsComponent);
   }
 
+  _setViewState(state, payload) {
+    const resetState = () => {
+      this._filmDetailsComponent.updateData({
+        isDisabled: false,
+        deletingId: null,
+      });
+    };
+
+    switch (state) {
+      case State.DISABLING:
+        this._filmDetailsComponent.updateData({
+          isDisabled: true,
+        });
+        break;
+      case State.DELETING:
+        this._filmDetailsComponent.updateData({
+          isDisabled: true,
+          deletingId: payload,
+        });
+        break;
+      case State.ABORTING:
+        if (!payload) {
+          this._filmDetailsComponent.shake(resetState);
+          return;
+        }
+
+        this._filmDetailsComponent.shake(resetState, payload);
+        break;
+    }
+  }
+
   _handleOnCloseBtnClick() {
     this._closeDetails();
   }
@@ -106,17 +143,34 @@ export default class FilmDetails {
     );
   }
 
-  _handleFormSubmit(update) {
-    this._changeFilm(UserAction.UPDATE_FILM, UpdateType.MINOR, update);
+  _handleFormSubmit({filmId, comment}) {
+    this._setViewState(State.DISABLING);
+    this._api
+      .createComment(filmId, comment)
+      .then((update) => {
+        this._changeFilm(UserAction.UPDATE_FILM, UpdateType.MINOR, update);
+      })
+      .catch(() => this._setViewState(State.ABORTING));
   }
 
   _handleCommentDeleteClick(commentId) {
-    const updateComments = this._film.comments.filter((comment) => comment.id.toString() !== commentId);
+    this._setViewState(State.DELETING, commentId);
+    this._api
+      .deleteComment(commentId)
+      .then(() => {
+        const updateComments = this._film.comments.filter((comment) => comment.id.toString() !== commentId);
 
-    this._changeFilm(
-      UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
-      Object.assign({}, this._film, {comments: [...updateComments]})
-    );
+        this._changeFilm(
+          UserAction.UPDATE_FILM,
+          UpdateType.MINOR,
+          Object.assign({}, this._film, {
+            comments: updateComments.map((comment) => comment.id),
+          })
+        );
+      })
+      .catch(() => {
+        const element = this._filmDetailsComponent.getCommentItemById(commentId);
+        this._setViewState(State.ABORTING, element);
+      });
   }
 }

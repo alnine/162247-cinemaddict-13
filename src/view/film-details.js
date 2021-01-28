@@ -3,13 +3,13 @@ import he from "he";
 import SmartView from "./smart";
 import {createCommentTemplate} from "./comment-item";
 import {capitilizeString, getDuration} from "../utils/common";
-import {NAMES} from "../mock/constants";
-import {generateId, getRandomInteger} from "../mock/helpers";
 
 const DEFAULT_LOCAL_COMMENT = {
   comment: ``,
   emoji: null,
 };
+
+const COMMENT_ID_ATRIBUTE = "data-comment-id";
 
 const generateGenreList = (genres) => {
   return genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join("");
@@ -35,6 +35,8 @@ const createFilmDetailsTemplate = (film) => {
     isWatchList,
     isWatched,
     isFavorite,
+    isDisabled,
+    deletingId,
   } = film;
 
   const {comment, emoji} = localComment;
@@ -46,7 +48,7 @@ const createFilmDetailsTemplate = (film) => {
 
       return date1.diff(date2);
     })
-    .map(createCommentTemplate)
+    .map((commentItem) => createCommentTemplate(commentItem, commentItem.id === deletingId))
     .join(``);
 
   const {hours, mins} = getDuration(runtime);
@@ -150,36 +152,36 @@ const createFilmDetailsTemplate = (film) => {
             </div>
 
             <label class="film-details__comment-label">
-              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(
-                comment
-              )}</textarea>
+              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${
+                isDisabled ? `disabled` : ``
+              }>${he.encode(comment)}</textarea>
             </label>
 
             <div class="film-details__emoji-list">
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${
                 emoji === `smile` ? `checked` : ``
-              }>
+              } ${isDisabled ? `disabled` : ``}>
               <label class="film-details__emoji-label" for="emoji-smile">
                 <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
               </label>
 
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" ${
                 emoji === `sleeping` ? `checked` : ``
-              }>
+              } ${isDisabled ? `disabled` : ``}>
               <label class="film-details__emoji-label" for="emoji-sleeping">
                 <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
               </label>
 
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${
                 emoji === `puke` ? `checked` : ``
-              }>
+              } ${isDisabled ? `disabled` : ``}>
               <label class="film-details__emoji-label" for="emoji-puke">
                 <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
               </label>
 
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry"  ${
                 emoji === `angry` ? `checked` : ``
-              }>
+              } ${isDisabled ? `disabled` : ``}>
               <label class="film-details__emoji-label" for="emoji-angry">
                 <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
               </label>
@@ -212,25 +214,18 @@ export default class FilmDetails extends SmartView {
   static parseFilmToData(film) {
     return Object.assign({}, film, {
       localComment: DEFAULT_LOCAL_COMMENT,
+      isDisabled: false,
+      deletingId: null,
     });
   }
 
-  static parseDataToFilm(data) {
-    const film = Object.assign({}, data);
-
-    const {emoji, comment} = data.localComment;
-    const newComment = {
-      id: generateId(),
-      emoji,
-      text: comment,
-      author: NAMES[getRandomInteger(0, NAMES.length - 1)],
-      date: dayjs().toDate(),
+  static parseDataToCreateComment(data) {
+    return {
+      filmId: data.id,
+      comment: Object.assign({}, data.localComment, {
+        date: dayjs().toDate(),
+      }),
     };
-
-    film.comments = [...film.comments, newComment];
-    delete film.localComment;
-
-    return film;
   }
 
   _getCloseBtnElement() {
@@ -281,12 +276,16 @@ export default class FilmDetails extends SmartView {
   }
 
   _formSubmitHandler() {
+    if (this._data.isDisabled) {
+      return;
+    }
+
     const {comment, emoji} = this._data.localComment;
     if (!comment || !emoji) {
       return;
     }
 
-    const update = FilmDetails.parseDataToFilm(this._data);
+    const update = FilmDetails.parseDataToCreateComment(this._data);
     this._callback.formSubmit(update);
   }
 
@@ -325,6 +324,7 @@ export default class FilmDetails extends SmartView {
     this.setAddToWatchListClickHandler(this._callback.addToWatchClick);
     this.setWatchedClickHandler(this._callback.watchedClick);
     this.setFavoriteClickHandler(this._callback.favoriteClick);
+    this.setCommentDeleteHandler(this._callback.deleteCommentClick);
   }
 
   getTemplate() {
@@ -334,6 +334,12 @@ export default class FilmDetails extends SmartView {
   removeElement() {
     this._element = null;
     document.removeEventListener(`keydown`, this._documentKeyDownHandler);
+  }
+
+  getCommentItemById(id) {
+    const listChildren = this._getCommentListElement().children;
+    const items = [...listChildren];
+    return items.find((item) => item.querySelector(`[${COMMENT_ID_ATRIBUTE}="${id}"]`));
   }
 
   setFormSubmitHandler(callback) {

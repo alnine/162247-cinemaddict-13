@@ -1,7 +1,7 @@
-import ProfileView from "./view/profile";
 import SiteMenuView from "./view/site-menu";
 import FilmsAmountView from "./view/films-amount";
 import StatsView from "./view/stats";
+import ProfilePresenter from "./presenter/profile";
 import FiltersPresenter from "./presenter/filters";
 import FilmsBoardPresenter from "./presenter/filmsBoard";
 import FilterModel from "./model/filter";
@@ -26,6 +26,7 @@ const filmsModel = new FilmsModel();
 
 const siteMenuComponent = new SiteMenuView();
 
+const profilePresenter = new ProfilePresenter(siteHeaderElement, filmsModel);
 const filtersPresenter = new FiltersPresenter(siteMenuComponent, filterModel, filmsModel);
 const filmsBoardPresenter = new FilmsBoardPresenter(siteBody, siteMainElement, filmsModel, filterModel, api);
 
@@ -58,10 +59,9 @@ const handleSiteMenuClick = (menuItem) => {
 
 siteMenuComponent.setMenuItemClickHandler(handleSiteMenuClick);
 
-render(siteHeaderElement, new ProfileView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
 render(siteMainElement, siteMenuComponent, RenderPosition.BEFOREEND);
-render(footerStatisticsElement, new FilmsAmountView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
 
+profilePresenter.init();
 filtersPresenter.init();
 filmsBoardPresenter.init();
 
@@ -72,4 +72,7 @@ api
   })
   .catch(() => {
     filmsModel.setFilms(UpdateType.INIT, []);
+  })
+  .finally(() => {
+    render(footerStatisticsElement, new FilmsAmountView(filmsModel.getFilms().length), RenderPosition.BEFOREEND);
   });

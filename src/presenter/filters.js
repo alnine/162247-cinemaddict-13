@@ -1,4 +1,4 @@
-import FiltersListView from "../view/filters-list";
+import FiltersListView from "../view/filter-list";
 import {remove, render, RenderPosition, replace} from "../utils/render";
 import {FilterType, UpdateType, MenuItem} from "../constants";
 import {filter} from "../utils/filter";

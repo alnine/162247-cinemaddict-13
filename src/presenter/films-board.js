@@ -1,6 +1,6 @@
 import FilmCardPresenter from "./film-card";
 import FilmDetailsPresenter from "./film-details";
-import SortView from "../view/list-sort";
+import SortView from "../view/sort-list";
 import FilmsView from "../view/films";
 import NoFilmsView from "../view/no-films";
 import LoadingView from "../view/loading";

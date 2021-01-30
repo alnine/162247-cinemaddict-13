@@ -39,6 +39,6 @@ export default class FilterList extends AbstractView {
 
   setFilterChangeClickHandler(callback) {
     this._callback.typeFilterChange = callback;
-    this.getElement().addEventListener("click", this._handleFilterChangeClick);
+    this.getElement().addEventListener(`click`, this._handleFilterChangeClick);
   }
 }

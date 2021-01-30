@@ -11,10 +11,10 @@ export const capitilizeString = (string) => {
 
 export const getDuration = (minutes) => {
   const date1 = dayjs();
-  const date2 = date1.add(minutes, "minute");
+  const date2 = date1.add(minutes, `minute`);
 
-  const hours = date2.diff(date1, "hour");
-  const mins = date2.subtract(hours, "hour").diff(date1, "minute");
+  const hours = date2.diff(date1, `hour`);
+  const mins = date2.subtract(hours, `hour`).diff(date1, `minute`);
 
   return {
     hours,

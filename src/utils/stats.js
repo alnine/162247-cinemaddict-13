@@ -42,11 +42,11 @@ export const filterWatchedFilmsInDateRange = (films, dateFrom, dateTo) => {
 export const filterInRange = {
   [StatsFilterType.ALL_TIME]: (films) => films.filter((film) => film.isWatched),
   [StatsFilterType.TODAY]: (films) =>
-    filterWatchedFilmsInDateRange(films, dayjs().startOf("day").toDate(), dayjs().toDate()),
+    filterWatchedFilmsInDateRange(films, dayjs().startOf(`day`).toDate(), dayjs().toDate()),
   [StatsFilterType.WEEK]: (films) =>
-    filterWatchedFilmsInDateRange(films, dayjs().subtract(1, "week").toDate(), dayjs().toDate()),
+    filterWatchedFilmsInDateRange(films, dayjs().subtract(1, `week`).toDate(), dayjs().toDate()),
   [StatsFilterType.MONTH]: (films) =>
-    filterWatchedFilmsInDateRange(films, dayjs().subtract(1, "month").toDate(), dayjs().toDate()),
+    filterWatchedFilmsInDateRange(films, dayjs().subtract(1, `month`).toDate(), dayjs().toDate()),
   [StatsFilterType.YEAR]: (films) =>
-    filterWatchedFilmsInDateRange(films, dayjs().subtract(1, "year").toDate(), dayjs().toDate()),
+    filterWatchedFilmsInDateRange(films, dayjs().subtract(1, `year`).toDate(), dayjs().toDate()),
 };

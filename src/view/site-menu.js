@@ -22,7 +22,7 @@ export default class SiteMenu extends AbstractView {
     evt.preventDefault();
     const element = evt.target;
 
-    if (element.tagName !== "A") {
+    if (element.tagName !== `A`) {
       return;
     }
 

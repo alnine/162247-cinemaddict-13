@@ -39,7 +39,7 @@ const handleSiteMenuClick = (menuItem) => {
       remove(statsComponent);
       siteMenuComponent
         .getElement()
-        .querySelector("[data-anchor=stats]")
+        .querySelector(`[data-anchor=stats]`)
         .classList.remove(`main-navigation__additional--active`);
       break;
     case MenuItem.STATS:
@@ -49,7 +49,7 @@ const handleSiteMenuClick = (menuItem) => {
       render(siteMainElement, statsComponent, RenderPosition.BEFOREEND);
       siteMenuComponent
         .getElement()
-        .querySelector("[data-anchor=stats]")
+        .querySelector(`[data-anchor=stats]`)
         .classList.add(`main-navigation__additional--active`);
       break;
   }

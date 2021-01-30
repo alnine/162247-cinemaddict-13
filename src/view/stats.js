@@ -38,8 +38,8 @@ const renderChart = (statisticCtx, {films}) => {
             size: 20,
           },
           color: `#ffffff`,
-          anchor: "start",
-          align: "start",
+          anchor: `start`,
+          align: `start`,
           offset: 40,
         },
       },
@@ -85,7 +85,7 @@ const renderChart = (statisticCtx, {films}) => {
 
 const createStatsTemplate = ({films, filter}) => {
   const filmsCount = films.length;
-  let topGenre = "";
+  let topGenre = ``;
 
   const filmsCountByGenres = countFilmsByGenres(films);
   const sortedGenresByCount = Object.entries(filmsCountByGenres).sort((a, b) => b[1] - a[1]);
@@ -107,27 +107,27 @@ const createStatsTemplate = ({films, filter}) => {
       <p class="statistic__filters-description">Show stats:</p>
 
       <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" ${
-        filter === StatsFilterType.ALL_TIME ? "checked" : ""
+        filter === StatsFilterType.ALL_TIME ? `checked` : ``
       }>
       <label for="statistic-all-time" class="statistic__filters-label">All time</label>
 
       <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today" ${
-        filter === StatsFilterType.TODAY ? "checked" : ""
+        filter === StatsFilterType.TODAY ? `checked` : ``
       }>
       <label for="statistic-today" class="statistic__filters-label">Today</label>
 
       <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week" ${
-        filter === StatsFilterType.WEEK ? "checked" : ""
+        filter === StatsFilterType.WEEK ? `checked` : ``
       }>
       <label for="statistic-week" class="statistic__filters-label">Week</label>
 
       <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month" ${
-        filter === StatsFilterType.MONTH ? "checked" : ""
+        filter === StatsFilterType.MONTH ? `checked` : ``
       }>
       <label for="statistic-month" class="statistic__filters-label">Month</label>
 
       <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year" ${
-        filter === StatsFilterType.YEAR ? "checked" : ""
+        filter === StatsFilterType.YEAR ? `checked` : ``
       }>
       <label for="statistic-year" class="statistic__filters-label">Year</label>
     </form>
@@ -182,7 +182,7 @@ export default class Stats extends SmartView {
   _dateRangeChangeHandler(evt) {
     evt.preventDefault();
 
-    if (evt.target.tagName !== "INPUT") {
+    if (evt.target.tagName !== `INPUT`) {
       return;
     }
     const filter = evt.target.value;

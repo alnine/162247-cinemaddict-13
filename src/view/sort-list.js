@@ -5,13 +5,13 @@ const createSortTemplate = (sortType) => {
   const activeClass = `sort__button--active`;
 
   return `<ul class="sort">
-    <li><a href="#" class="sort__button ${sortType === SortTypes.DEFAULT ? activeClass : ""}" data-sort-type="${
+    <li><a href="#" class="sort__button ${sortType === SortTypes.DEFAULT ? activeClass : ``}" data-sort-type="${
     SortTypes.DEFAULT
   }">Sort by default</a></li>
-    <li><a href="#" class="sort__button ${sortType === SortTypes.DATE ? activeClass : ""}" data-sort-type="${
+    <li><a href="#" class="sort__button ${sortType === SortTypes.DATE ? activeClass : ``}" data-sort-type="${
     SortTypes.DATE
   }">Sort by date</a></li>
-    <li><a href="#" class="sort__button ${sortType === SortTypes.RATING ? activeClass : ""}" data-sort-type="${
+    <li><a href="#" class="sort__button ${sortType === SortTypes.RATING ? activeClass : ``}" data-sort-type="${
     SortTypes.RATING
   }">Sort by rating</a></li>
   </ul>`;

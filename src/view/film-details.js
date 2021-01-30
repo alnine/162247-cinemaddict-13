@@ -9,10 +9,10 @@ const DEFAULT_LOCAL_COMMENT = {
   emoji: null,
 };
 
-const COMMENT_ID_ATRIBUTE = "data-comment-id";
+const COMMENT_ID_ATRIBUTE = `data-comment-id`;
 
 const generateGenreList = (genres) => {
-  return genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join("");
+  return genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(``);
 };
 
 const createFilmDetailsTemplate = (film) => {

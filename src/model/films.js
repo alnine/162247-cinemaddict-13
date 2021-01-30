@@ -38,16 +38,16 @@ export default class Films extends Observer {
   static adaptFilmToServer(film) {
     const filmDetails = {
       title: film.title,
-      ["alternative_title"]: film.originalTitle,
-      ["total_rating"]: film.totalRating,
+      [`alternative_title`]: film.originalTitle,
+      [`total_rating`]: film.totalRating,
       poster: film.posterUrl,
-      ["age_rating"]: film.ageRating,
+      [`age_rating`]: film.ageRating,
       director: film.director,
       writers: [...film.writers],
       actors: [...film.actors],
       release: {
         date: film.releaseDate.toISOString(),
-        ["release_country"]: film.country,
+        [`release_country`]: film.country,
       },
       runtime: film.runtime,
       genre: [...film.genres],
@@ -56,16 +56,16 @@ export default class Films extends Observer {
 
     const userDetails = {
       watchlist: film.isWatchList,
-      ["already_watched"]: film.isWatched,
-      ["watching_date"]: film.watchingDate.toISOString(),
+      [`already_watched`]: film.isWatched,
+      [`watching_date`]: film.watchingDate.toISOString(),
       favorite: film.isFavorite,
     };
 
     return {
       id: film.id,
       comments: [...film.comments],
-      ["film_info"]: Object.assign({}, filmDetails),
-      ["user_details"]: Object.assign({}, userDetails),
+      [`film_info`]: Object.assign({}, filmDetails),
+      [`user_details`]: Object.assign({}, userDetails),
     };
   }
 

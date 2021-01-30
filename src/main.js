@@ -3,7 +3,7 @@ import FilmsAmountView from "./view/films-amount";
 import StatsView from "./view/stats";
 import ProfilePresenter from "./presenter/profile";
 import FiltersPresenter from "./presenter/filters";
-import FilmsBoardPresenter from "./presenter/filmsBoard";
+import FilmsBoardPresenter from "./presenter/films-board";
 import FilterModel from "./model/filter";
 import FilmsModel from "./model/films";
 import {remove, render, RenderPosition} from "./utils/render";

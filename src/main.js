@@ -9,9 +9,7 @@ import FilmsModel from "./model/films";
 import {remove, render, RenderPosition} from "./utils/render";
 import {FilterType, MenuItem, UpdateType} from "./constants";
 import Api from "./api";
-
-const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
-const AUTHORIZATION = `Basic cwoimpksdljlfdkJ`;
+import {END_POINT, AUTHORIZATION} from "./constants";
 
 const siteBody = document.querySelector(`body`);
 const siteHeaderElement = siteBody.querySelector(`.header`);

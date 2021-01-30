@@ -1,3 +1,6 @@
+export const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
+export const AUTHORIZATION = `Basic cwoimpksdljlfdkJ`;
+
 export const SortTypes = {
   DEFAULT: `default`,
   DATE: `date`,

@@ -189,12 +189,12 @@ export default class FilmsBoard {
 
     this._filmDetailsId = filmId;
     this._filmDetailsPresenter = new FilmDetailsPresenter(
-      this._root,
-      this._filmDetailsId,
-      this._api,
-      this._getFilmById,
-      this._сloseFilmDetails,
-      this._handleViewAction
+        this._root,
+        this._filmDetailsId,
+        this._api,
+        this._getFilmById,
+        this._сloseFilmDetails,
+        this._handleViewAction
     );
     this._filmDetailsPresenter.init();
 

@@ -6,14 +6,14 @@ const createSortTemplate = (sortType) => {
 
   return `<ul class="sort">
     <li><a href="#" class="sort__button ${sortType === SortTypes.DEFAULT ? activeClass : ``}" data-sort-type="${
-    SortTypes.DEFAULT
-  }">Sort by default</a></li>
+  SortTypes.DEFAULT
+}">Sort by default</a></li>
     <li><a href="#" class="sort__button ${sortType === SortTypes.DATE ? activeClass : ``}" data-sort-type="${
-    SortTypes.DATE
-  }">Sort by date</a></li>
+  SortTypes.DATE
+}">Sort by date</a></li>
     <li><a href="#" class="sort__button ${sortType === SortTypes.RATING ? activeClass : ``}" data-sort-type="${
-    SortTypes.RATING
-  }">Sort by rating</a></li>
+  SortTypes.RATING
+}">Sort by rating</a></li>
   </ul>`;
 };
 

@@ -112,34 +112,34 @@ export default class FilmDetails {
 
   _handleAddToWatchListClick() {
     this._changeFilm(
-      UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
-      Object.assign({}, this._film, {
-        isWatchList: !this._film.isWatchList,
-        comments: this._film.comments.map((comment) => comment.id),
-      })
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        Object.assign({}, this._film, {
+          isWatchList: !this._film.isWatchList,
+          comments: this._film.comments.map((comment) => comment.id),
+        })
     );
   }
 
   _handleWatchedClick() {
     this._changeFilm(
-      UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
-      Object.assign({}, this._film, {
-        isWatched: !this._film.isWatched,
-        comments: this._film.comments.map((comment) => comment.id),
-      })
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        Object.assign({}, this._film, {
+          isWatched: !this._film.isWatched,
+          comments: this._film.comments.map((comment) => comment.id),
+        })
     );
   }
 
   _handleFavoriteClick() {
     this._changeFilm(
-      UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
-      Object.assign({}, this._film, {
-        isFavorite: !this._film.isFavorite,
-        comments: this._film.comments.map((comment) => comment.id),
-      })
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        Object.assign({}, this._film, {
+          isFavorite: !this._film.isFavorite,
+          comments: this._film.comments.map((comment) => comment.id),
+        })
     );
   }
 
@@ -161,11 +161,11 @@ export default class FilmDetails {
         const updateComments = this._film.comments.filter((comment) => comment.id.toString() !== commentId);
 
         this._changeFilm(
-          UserAction.UPDATE_FILM,
-          UpdateType.MINOR,
-          Object.assign({}, this._film, {
-            comments: updateComments.map((comment) => comment.id),
-          })
+            UserAction.UPDATE_FILM,
+            UpdateType.MINOR,
+            Object.assign({}, this._film, {
+              comments: updateComments.map((comment) => comment.id),
+            })
         );
       })
       .catch(() => {

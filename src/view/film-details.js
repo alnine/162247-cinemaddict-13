@@ -120,18 +120,18 @@ const createFilmDetailsTemplate = (film) => {
 
         <section class="film-details__controls">
           <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${
-            isWatchList ? `checked` : ``
-          }>
+  isWatchList ? `checked` : ``
+}>
           <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
           <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${
-            isWatched ? `checked` : ``
-          }>
+  isWatched ? `checked` : ``
+}>
           <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
           <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${
-            isFavorite ? `checked` : ``
-          }>
+  isFavorite ? `checked` : ``
+}>
           <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
         </section>
       </div>
@@ -153,35 +153,35 @@ const createFilmDetailsTemplate = (film) => {
 
             <label class="film-details__comment-label">
               <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${
-                isDisabled ? `disabled` : ``
-              }>${he.encode(comment)}</textarea>
+  isDisabled ? `disabled` : ``
+}>${he.encode(comment)}</textarea>
             </label>
 
             <div class="film-details__emoji-list">
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${
-                emoji === `smile` ? `checked` : ``
-              } ${isDisabled ? `disabled` : ``}>
+  emoji === `smile` ? `checked` : ``
+} ${isDisabled ? `disabled` : ``}>
               <label class="film-details__emoji-label" for="emoji-smile">
                 <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
               </label>
 
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" ${
-                emoji === `sleeping` ? `checked` : ``
-              } ${isDisabled ? `disabled` : ``}>
+  emoji === `sleeping` ? `checked` : ``
+} ${isDisabled ? `disabled` : ``}>
               <label class="film-details__emoji-label" for="emoji-sleeping">
                 <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
               </label>
 
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${
-                emoji === `puke` ? `checked` : ``
-              } ${isDisabled ? `disabled` : ``}>
+  emoji === `puke` ? `checked` : ``
+} ${isDisabled ? `disabled` : ``}>
               <label class="film-details__emoji-label" for="emoji-puke">
                 <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
               </label>
 
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry"  ${
-                emoji === `angry` ? `checked` : ``
-              } ${isDisabled ? `disabled` : ``}>
+  emoji === `angry` ? `checked` : ``
+} ${isDisabled ? `disabled` : ``}>
               <label class="film-details__emoji-label" for="emoji-angry">
                 <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
               </label>
@@ -248,10 +248,10 @@ export default class FilmDetails extends SmartView {
     evt.preventDefault();
 
     this.updateData(
-      {
-        localComment: Object.assign({}, this._data.localComment, {comment: evt.target.value}),
-      },
-      true
+        {
+          localComment: Object.assign({}, this._data.localComment, {comment: evt.target.value}),
+        },
+        true
     );
   }
 

@@ -46,25 +46,25 @@ export default class FilmCard {
 
   _handleAddToWatchListClick() {
     this._changeFilm(
-      UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
-      Object.assign({}, this._film, {isWatchList: !this._film.isWatchList})
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        Object.assign({}, this._film, {isWatchList: !this._film.isWatchList})
     );
   }
 
   _handleWatchedClick() {
     this._changeFilm(
-      UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
-      Object.assign({}, this._film, {isWatched: !this._film.isWatched})
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        Object.assign({}, this._film, {isWatched: !this._film.isWatched})
     );
   }
 
   _handleFavoriteClick() {
     this._changeFilm(
-      UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
-      Object.assign({}, this._film, {isFavorite: !this._film.isFavorite})
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        Object.assign({}, this._film, {isFavorite: !this._film.isFavorite})
     );
   }
 }

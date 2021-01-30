@@ -16,8 +16,8 @@ export const createCommentTemplate = (comment, isDeleting) => {
         <span class="film-details__comment-author">${author}</span>
         <span class="film-details__comment-day">${dayjs(date).fromNow()}</span>
         <button data-comment-id=${id} type='button' class="film-details__comment-delete" ${
-    isDeleting ? `disabled` : ``
-  }>${isDeleting ? `Deleting` : `Delete`}</button>
+  isDeleting ? `disabled` : ``
+}>${isDeleting ? `Deleting` : `Delete`}</button>
       </p>
     </div>
   </li>`;

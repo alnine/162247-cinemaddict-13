@@ -34,11 +34,12 @@ export default class FilterList extends AbstractView {
 
   _handleFilterChangeClick(evt) {
     evt.preventDefault();
-    this._callback.typeFilterChange(evt.target.dataset.type);
+    this._callback.typeFilterChange(evt.currentTarget.dataset.type);
   }
 
   setFilterChangeClickHandler(callback) {
     this._callback.typeFilterChange = callback;
-    this.getElement().addEventListener(`click`, this._handleFilterChangeClick);
+    const filterItems = this.getElement().querySelectorAll(`.main-navigation__item`);
+    filterItems.forEach((item) => item.addEventListener(`click`, this._handleFilterChangeClick));
   }
 }

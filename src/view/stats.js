@@ -5,9 +5,9 @@ import {countFilmsByGenres, filterInRange} from "../utils/stats";
 import {getDuration} from "../utils/common";
 import {StatsFilterType} from "../constants";
 
-const renderChart = (statisticCtx, {films}) => {
-  const BAR_HEIGHT = 50;
+const BAR_HEIGHT = 50;
 
+const renderChart = (statisticCtx, {films}) => {
   const filmsCountByGenres = countFilmsByGenres(films);
   const sortedGenresByCount = Object.entries(filmsCountByGenres).sort((a, b) => b[1] - a[1]);
 

@@ -58,7 +58,7 @@ export default class FilmsBoard {
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._сloseFilmDetails = this._сloseFilmDetails.bind(this);
+    this._closeFilmDetails = this._closeFilmDetails.bind(this);
     this._openFilmDetails = this._openFilmDetails.bind(this);
     this._getFilmById = this._getFilmById.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
@@ -116,7 +116,7 @@ export default class FilmsBoard {
   _handleEscKeyDown(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
-      this._сloseFilmDetails();
+      this._closeFilmDetails();
     }
   }
 
@@ -170,7 +170,7 @@ export default class FilmsBoard {
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
   }
 
-  _сloseFilmDetails() {
+  _closeFilmDetails() {
     if (this._filmDetailsPresenter === null) {
       return;
     }
@@ -184,7 +184,7 @@ export default class FilmsBoard {
 
   _openFilmDetails(filmId) {
     if (this._filmDetailsPresenter !== null) {
-      this._сloseFilmDetails();
+      this._closeFilmDetails();
     }
 
     this._filmDetailsId = filmId;
@@ -193,7 +193,7 @@ export default class FilmsBoard {
         this._filmDetailsId,
         this._api,
         this._getFilmById,
-        this._сloseFilmDetails,
+        this._closeFilmDetails,
         this._handleViewAction
     );
     this._filmDetailsPresenter.init();
@@ -332,7 +332,7 @@ export default class FilmsBoard {
     }
 
     if (resetFilmDetails) {
-      this._сloseFilmDetails();
+      this._closeFilmDetails();
     }
   }
 
